@@ -1,0 +1,7 @@
+{
+  "name": "GhostESP (ESP32 generic)",
+  "version": "v2.0",
+  "author": "GhostESP-Revival",
+  "description": "Prebuilt GhostESP bundle for esp32-generic. Put binaries here or download during build.",
+  "files": ["esp32-generic.zip"]
+}
