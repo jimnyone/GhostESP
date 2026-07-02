@@ -1,0 +1,150 @@
+name: Build Flipper Zero App
+
+on:
+  push:
+    branches:
+      - Development-deki
+      - main
+      - master
+    paths:
+      - 'flipper/**'
+      - '.github/workflows/flipper-build.yml'
+  pull_request:
+    branches:
+      - Development-deki
+      - main
+      - master
+    paths:
+      - 'flipper/**'
+  workflow_dispatch:
+  release:
+    types: [created, published]
+
+jobs:
+  build:
+    name: Build Flipper Zero Application
+    runs-on: ubuntu-latest
+    
+    container:
+      image: flipperdevices/flipperzero-dev:latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up build environment
+        run: |
+          apt-get update
+          apt-get install -y cmake ninja-build python3-pip
+          pip3 install --upgrade pip
+          if [ -f "requirements.txt" ]; then pip3 install -r requirements.txt; fi
+
+      - name: Build Flipper Application
+        run: |
+          cd flipper || true
+          if [ -f "CMakeLists.txt" ]; then
+            mkdir -p build
+            cd build
+            cmake -GNinja ..
+            ninja
+          elif [ -f "Makefile" ]; then
+            make
+          else
+            echo "⚠️  No CMakeLists.txt or Makefile found in flipper directory"
+            echo "Building with default Flipper build system..."
+            # Fallback: use FBT if available
+            fbt fap_ghostesp_app || echo "FBT build failed, check flipper directory structure"
+          fi
+
+      - name: Locate built application
+        id: find_app
+        run: |
+          # Search for .fap file
+          FAP_FILE=$(find . -name "*.fap" -type f | head -1)
+          if [ -z "$FAP_FILE" ]; then
+            echo "⚠️  No .fap file found, checking for other artifacts..."
+            find . -name "ghostesp*" -type f
+            exit 1
+          fi
+          echo "fap_path=$FAP_FILE" >> $GITHUB_OUTPUT
+          echo "✅ Found: $FAP_FILE"
+
+      - name: Prepare artifacts
+        if: success()
+        run: |
+          mkdir -p artifacts
+          if [ -f "${{ steps.find_app.outputs.fap_path }}" ]; then
+            cp "${{ steps.find_app.outputs.fap_path }}" artifacts/ghostesp.fap
+            ls -lh artifacts/
+          fi
+
+      - name: Upload artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flipper-app
+          path: artifacts/
+          retention-days: 30
+
+      - name: Upload to Release
+        if: github.event_name == 'release' && success()
+        uses: softprops/action-gh-release@v1
+        with:
+          files: artifacts/ghostesp.fap
+          draft: false
+          prerelease: ${{ github.event.release.prerelease }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request' && success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ **Flipper Zero App Build Successful!**\n\nThe application has been built successfully. Download the artifact from the build summary.'
+            })
+
+      - name: Comment on PR (Build Failed)
+        if: github.event_name == 'pull_request' && failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ **Flipper Zero App Build Failed**\n\nPlease check the workflow logs for details.'
+            })
+
+  notify:
+    name: Notify Build Status
+    runs-on: ubuntu-latest
+    needs: build
+    if: always()
+    
+    steps:
+      - name: Send Discord Notification (Success)
+        if: needs.build.result == 'success'
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          status: success
+          title: "✅ Flipper Zero App Built"
+          description: "GhostESP Flipper app has been built successfully"
+          color: 0x00FF00
+
+      - name: Send Discord Notification (Failure)
+        if: needs.build.result == 'failure'
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          status: failure
+          title: "❌ Flipper Zero App Build Failed"
+          description: "Check the workflow logs for details"
+          color: 0xFF0000
