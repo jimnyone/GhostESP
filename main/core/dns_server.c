@@ -13,6 +13,11 @@
 #include "esp_system.h"
 
 #include "core/dns_server.h"
+<<<<<<< HEAD
+=======
+#include "managers/ghostscript_runtime.h"
+#include "managers/sd_card_manager.h"
+>>>>>>> 73ca60d6 (Merge branch 'scripts' into pr/338)
 #include "lwip/err.h"
 #include "lwip/netdb.h"
 #include "lwip/sockets.h"
@@ -257,6 +262,7 @@ void dns_server_task(void *pvParameters) {
         if (reply_len <= 0) {
           ESP_LOGE(TAG, "Failed to prepare a DNS reply");
         } else {
+<<<<<<< HEAD
           int err =
               sendto(sock, reply, reply_len, 0, (struct sockaddr *)&source_addr,
                      sizeof(source_addr));
@@ -264,6 +270,267 @@ void dns_server_task(void *pvParameters) {
             ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
             break;
           }
+=======
+            const char *lookup_mode = handle->use_psram_path ? "PSRAM bloom+ht" :
+                                      handle->bloom ? "SD bloom+binary verify" :
+                                      "raw SD binary search";
+            glog("DNS sinkhole: ready (%s, upstream " IPSTR ")\n",
+                 lookup_mode,
+                 IP2STR(&(esp_ip4_addr_t){.addr = handle->upstream_dns}));
+        }
+
+        while (handle->started) {
+            fd_set readfds;
+            FD_ZERO(&readfds);
+            FD_SET(listen_sock, &readfds);
+            FD_SET(fwd_sock, &readfds);
+            int maxfd = listen_sock > fwd_sock ? listen_sock : fwd_sock;
+
+            struct timeval sel_tv = {1, 0};
+            int sel = select(maxfd + 1, &readfds, NULL, NULL, &sel_tv);
+            if (sel <= 0) continue;
+
+            // Handle upstream responses first (non-blocking)
+            if (FD_ISSET(fwd_sock, &readfds)) {
+                char resp[DNS_MAX_LEN];
+                struct sockaddr_in resp_src;
+                socklen_t resp_len = sizeof(resp_src);
+                int rlen = recvfrom(fwd_sock, resp, sizeof(resp), 0,
+                                    (struct sockaddr *)&resp_src, &resp_len);
+                if (rlen >= (int)sizeof(dns_header_t)) {
+                    if (resp_src.sin_addr.s_addr != upstream_addr.sin_addr.s_addr ||
+                        resp_src.sin_port != upstream_addr.sin_port) {
+                        continue;
+                    }
+                    uint16_t resp_id = ntohs(((dns_header_t *)resp)->id);
+                    int ri = fwd_ring_find(fwd_ring, SINKHOLE_FWD_RING, resp_id);
+                    if (ri >= 0) {
+                        ((dns_header_t *)resp)->id = htons(fwd_ring[ri].client_id);
+                        char matched_domain[SINKHOLE_MAX_DOMAIN] = {0};
+                        if (response_has_blocked_cname(handle, resp, rlen,
+                                                       matched_domain,
+                                                       sizeof(matched_domain))) {
+                            send_nxdomain(listen_sock, resp, rlen,
+                                          &fwd_ring[ri].client_addr);
+                            handle->stat_blocked++;
+                            char cip[INET_ADDRSTRLEN];
+                            inet_ntoa_r(fwd_ring[ri].client_addr.sin_addr, cip,
+                                        sizeof(cip) - 1);
+                            log_query(handle, cip, fwd_ring[ri].domain,
+                                      fwd_ring[ri].qtype, "BLOCKED_CNAME",
+                                      matched_domain);
+                        } else {
+                            sendto(listen_sock, resp, rlen, 0,
+                                   (struct sockaddr *)&fwd_ring[ri].client_addr,
+                                   sizeof(fwd_ring[ri].client_addr));
+                        }
+                        fwd_ring[ri].used = false;
+                    }
+                }
+            }
+
+            // Handle incoming client queries
+            if (!FD_ISSET(listen_sock, &readfds)) continue;
+
+            struct sockaddr_in client_addr;
+            socklen_t client_len = sizeof(client_addr);
+            int len = recvfrom(listen_sock, rx_buffer, sizeof(rx_buffer), 0,
+                               (struct sockaddr *)&client_addr, &client_len);
+            if (len < 0 || len < (int)sizeof(dns_header_t)) continue;
+
+            dns_header_t *hdr = (dns_header_t *)rx_buffer;
+            uint16_t flags = ntohs(hdr->flags);
+            if ((flags & OPCODE_MASK) != 0) continue;
+            if (flags & 0x8000) continue;
+            if (ntohs(hdr->qd_count) == 0) continue;
+
+            char name[SINKHOLE_MAX_DOMAIN];
+            char *name_end = parse_dns_name(
+                rx_buffer + sizeof(dns_header_t), rx_buffer + len,
+                name, sizeof(name));
+            if (!name_end) continue;
+            if (name_end + sizeof(dns_question_t) > rx_buffer + len) continue;
+            dns_question_t *question = (dns_question_t *)name_end;
+            uint16_t qtype = ntohs(question->type);
+
+            for (char *p = name; *p; p++) *p = (char)tolower((uint8_t)*p);
+
+            handle->stat_total++;
+            if (handle->stat_total == 1) {
+                glog("DNS sinkhole: first query received (%s)\n", name);
+            } else if (handle->stat_total == 2) {
+                glog("DNS sinkhole: forwarding to upstream " IPSTR "\n",
+                     IP2STR(&(esp_ip4_addr_t){.addr = handle->upstream_dns}));
+            } else if (handle->stat_total % 50 == 0) {
+                glog("Sinkhole: %lu queries, %lu blocked, %lu dropped\n",
+                     (unsigned long)handle->stat_total,
+                     (unsigned long)handle->stat_blocked,
+                     (unsigned long)handle->stat_dropped);
+                if (handle->auto_stats) {
+                    char sbuf[256];
+                    int sn = snprintf(sbuf, sizeof(sbuf),
+                        "total=%lu\nblocked=%lu\ndropped=%lu\nupstream=" IPSTR "\nlog=%s\n",
+                        (unsigned long)handle->stat_total,
+                        (unsigned long)handle->stat_blocked,
+                        (unsigned long)handle->stat_dropped,
+                        IP2STR(&(esp_ip4_addr_t){.addr = handle->upstream_dns}),
+                        handle->log_enabled ? "on" : "off");
+                    if (sn > 0) sd_card_write_file(SINKHOLE_STATS_PATH, sbuf, (size_t)sn);
+                }
+            }
+            uint32_t hash = fnv1a_hash(name);
+
+            bool blocked = false;
+            char matched_domain[SINKHOLE_MAX_DOMAIN] = {0};
+            bool cache_hit = cache_check(handle, name, hash, &blocked,
+                                         matched_domain,
+                                         sizeof(matched_domain));
+
+            if (!cache_hit) {
+                blocked = blocklist_check(handle, name, matched_domain,
+                                          sizeof(matched_domain));
+                cache_insert(handle, name, hash, blocked, matched_domain);
+            }
+
+            if (blocked) {
+                send_blocked_response(listen_sock, rx_buffer, len,
+                                      &client_addr, handle);
+                handle->stat_blocked++;
+
+                char cip[INET_ADDRSTRLEN];
+                inet_ntoa_r(client_addr.sin_addr, cip, sizeof(cip) - 1);
+                log_query(handle, cip, name, qtype, "BLOCKED", matched_domain);
+            } else {
+                uint16_t client_id = ntohs(hdr->id);
+                int slot = -1;
+                for (int i = 0; i < SINKHOLE_FWD_RING; i++) {
+                    if (!fwd_ring[i].used) { slot = i; break; }
+                }
+                if (slot < 0) {
+                    handle->stat_dropped++;
+                    if ((handle->stat_dropped & 0xFF) == 1) {
+                        glog("Sinkhole: forward ring full, dropping query for %s\n", name);
+                    }
+                    continue;
+                }
+
+                uint16_t upstream_id = ++next_fwd_id;
+                if (upstream_id == 0) upstream_id = ++next_fwd_id;
+                fwd_ring[slot].upstream_id = upstream_id;
+                fwd_ring[slot].client_id = client_id;
+                fwd_ring[slot].qtype = qtype;
+                fwd_ring[slot].client_addr = client_addr;
+                snprintf(fwd_ring[slot].domain, sizeof(fwd_ring[slot].domain),
+                         "%s", name);
+                fwd_ring[slot].used = true;
+
+                hdr->id = htons(upstream_id);
+                sendto(fwd_sock, rx_buffer, len, 0,
+                       (struct sockaddr *)&upstream_addr,
+                       sizeof(upstream_addr));
+
+                char cip[INET_ADDRSTRLEN];
+                inet_ntoa_r(client_addr.sin_addr, cip, sizeof(cip) - 1);
+                log_query(handle, cip, name, qtype, "FORWARDED", NULL);
+            }
+        }
+
+        close(fwd_sock);
+        close(listen_sock);
+
+        if (handle->use_psram_path) {
+            free_sinkhole_psram(handle);
+        } else if (handle->bloom) {
+            heap_caps_free(handle->bloom);
+            handle->bloom = NULL;
+            handle->bloom_size_bytes = 0;
+        }
+        if (handle->blocklist_fp) {
+            fclose(handle->blocklist_fp);
+            handle->blocklist_fp = NULL;
+        }
+
+        if (handle->sinkhole_jit_mounted) {
+            sd_card_unmount_after_flush(handle->sinkhole_display_suspended);
+            handle->sinkhole_jit_mounted = false;
+        }
+    } else {
+        // --- Legacy evil portal DNS mode ---
+        char addr_str[128];
+
+        while (handle->started) {
+            struct sockaddr_in dest_addr;
+            dest_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+            dest_addr.sin_family = AF_INET;
+            dest_addr.sin_port = htons(DNS_PORT);
+            inet_ntoa_r(dest_addr.sin_addr, addr_str, sizeof(addr_str) - 1);
+
+            int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+            if (sock < 0) {
+                ESP_LOGE(TAG, "Unable to create socket: errno %d", errno);
+                break;
+            }
+
+            int err = bind(sock, (struct sockaddr *)&dest_addr,
+                           sizeof(dest_addr));
+            if (err < 0)
+                ESP_LOGE(TAG, "Socket unable to bind: errno %d", errno);
+
+            while (handle->started) {
+                struct sockaddr_in6 source_addr;
+                socklen_t socklen = sizeof(source_addr);
+                int len = recvfrom(sock, rx_buffer, sizeof(rx_buffer), 0,
+                                   (struct sockaddr *)&source_addr, &socklen);
+
+                if (len < 0) {
+                    close(sock);
+                    break;
+                } else {
+                    if (source_addr.sin6_family == PF_INET) {
+                        inet_ntoa_r(
+                            ((struct sockaddr_in *)&source_addr)->sin_addr.s_addr,
+                            addr_str, sizeof(addr_str) - 1);
+                    } else if (source_addr.sin6_family == PF_INET6) {
+                        inet6_ntoa_r(source_addr.sin6_addr, addr_str,
+                                     sizeof(addr_str) - 1);
+                    }
+
+                    char reply[DNS_MAX_LEN];
+                    int reply_len = parse_dns_request(rx_buffer, len, reply,
+                                                      DNS_MAX_LEN, handle);
+                    if (reply_len > 0) {
+                        sendto(sock, reply, reply_len, 0,
+                               (struct sockaddr *)&source_addr,
+                               sizeof(source_addr));
+                    }
+                    /* Emit a structured event for the qname if we can extract it. */
+                    if (len >= 17) {
+                        char qname[128];
+                        int qpos = 0;
+                        int i = 12;
+                        while (i < len && rx_buffer[i] != 0 && qpos < (int)sizeof(qname) - 1) {
+                            uint8_t lbl = rx_buffer[i++];
+                            if (lbl > 63) break;
+                            for (int k = 0; k < lbl && i < len && qpos < (int)sizeof(qname) - 1; ++k)
+                                qname[qpos++] = rx_buffer[i++];
+                            if (qpos < (int)sizeof(qname) - 1) qname[qpos++] = '.';
+                        }
+                        if (qpos > 0) qname[qpos - 1] = '\0'; else qname[0] = '\0';
+                        if (qname[0]) {
+                            char dns_payload[300];
+                            snprintf(dns_payload, sizeof(dns_payload), "%s|%s",
+                                addr_str, qname);
+                            ghostscript_emit_event_escaped("dns_request", dns_payload);
+                        }
+                    }
+                }
+            }
+
+            if (sock != -1) {
+                shutdown(sock, 0);
+                close(sock);
+            }
+>>>>>>> 73ca60d6 (Merge branch 'scripts' into pr/338)
         }
       }
     }

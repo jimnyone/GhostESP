@@ -202,6 +202,7 @@ void terminal_view_add_text(const char *text) {
   if (!text || is_stopping) return;
   if (text[0] == '\0') return;
 
+<<<<<<< HEAD
   if (!terminal_active || !terminal_textarea) {
     queue_message(text);
     return;
@@ -236,6 +237,29 @@ void terminal_view_add_text(const char *text) {
 
   lv_textarea_set_cursor_pos(terminal_textarea, LV_TEXTAREA_CURSOR_LAST);
   xSemaphoreGive(terminal_mutex);
+=======
+size_t terminal_view_log_count(void) {
+  return term_line_count;
+}
+
+bool terminal_view_log_get(size_t index, char *out, size_t out_len) {
+  if (!out || out_len == 0 || index >= term_line_count) return false;
+  uint16_t idx = (term_line_head + (uint16_t)index) % MAX_TERMINAL_LINES;
+  const char *text = term_lines[idx].text;
+  if (!text) return false;
+  snprintf(out, out_len, "%s", text);
+  return true;
+}
+
+static bool terminal_is_near_bottom(void) {
+  if (!terminal_scroller) return true;
+  const lv_coord_t threshold = 20;
+  lv_coord_t content_h = lv_obj_get_content_height(terminal_scroller);
+  lv_coord_t view_h = lv_obj_get_height(terminal_scroller);
+  lv_coord_t scroll_y = lv_obj_get_scroll_y(terminal_scroller);
+  if (content_h <= view_h) return true;
+  return (scroll_y + view_h + threshold) >= content_h;
+>>>>>>> 73ca60d6 (Merge branch 'scripts' into pr/338)
 }
 
 void terminal_view_hardwareinput_callback(InputEvent *event) {

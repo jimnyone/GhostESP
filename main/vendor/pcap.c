@@ -4,6 +4,12 @@
 #include "esp_log.h"
 #include "esp_vfs_fat.h"
 #include "managers/sd_card_manager.h"
+<<<<<<< HEAD
+=======
+#include "managers/ghostchi_manager.h"
+#include "managers/ghostscript_runtime.h"
+#include "gui/toast.h"
+>>>>>>> 73ca60d6 (Merge branch 'scripts' into pr/338)
 #include "sys/time.h"
 #include <arpa/inet.h>
 #include <errno.h>
@@ -107,8 +113,34 @@ esp_err_t pcap_file_open(const char *base_file_name,
     return ret;
   }
 
+<<<<<<< HEAD
   ESP_LOGI(PCAP_TAG, "PCAP file %s opened and global header written.",
            file_name);
+=======
+  if (file_name[0] != '\0') {
+    ESP_LOGI(PCAP_TAG, "PCAP file %s opened and global header written.",
+             file_name);
+    if (pcap_file != NULL) {
+      glog("PCAP: saving to SD as %s\n", file_name);
+    } else {
+      glog("PCAP: streaming over UART (SD open failed)\n");
+    }
+  } else {
+    if (jit_template) {
+      ESP_LOGI(PCAP_TAG, "PCAP will JIT mount SD on first flush (no file open yet).");
+      glog("PCAP: JIT mounting SD on first flush\n");
+    } else {
+      ESP_LOGI(PCAP_TAG, "PCAP using serial (no file) and global header written.");
+      glog("PCAP: streaming over UART (no SD)\n");
+    }
+  }
+
+  s_capture_active = true;
+  xSemaphoreGive(pcap_mutex);
+  char cap_payload[64];
+  snprintf(cap_payload, sizeof(cap_payload), "%s|%d", pcap_base_name, (int)capture_type);
+  ghostscript_emit_event_escaped("capture_started", cap_payload);
+>>>>>>> 73ca60d6 (Merge branch 'scripts' into pr/338)
   return ESP_OK;
 }
 
@@ -514,4 +546,27 @@ void pcap_file_close() {
       xSemaphoreGive(pcap_mutex);
     }
   }
+<<<<<<< HEAD
+=======
+  cleanup_pcap_queue();
+  ghostscript_emit_event("capture_stopped", pcap_file_path);
+}
+
+void pcap_wireshark_stop(void) {
+  if (pcap_mutex == NULL) {
+    return;
+  }
+  
+  if (xSemaphoreTake(pcap_mutex, portMAX_DELAY) == pdTRUE) {
+    if (s_pcap_mode == PCAP_MODE_WIRESHARK) {
+      if (buffer_offset > 0) {
+        _pcap_flush_wireshark_stream_nolock();
+      }
+      s_pcap_mode = PCAP_MODE_FILE;
+    }
+    s_capture_active = false;
+    xSemaphoreGive(pcap_mutex);
+  }
+  cleanup_pcap_queue();
+>>>>>>> 73ca60d6 (Merge branch 'scripts' into pr/338)
 }

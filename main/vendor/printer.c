@@ -1,4 +1,5 @@
 #include "vendor/printer.h"
+#include "managers/ghostscript_runtime.h"
 #include "esp_event.h"
 #include "esp_log.h"
 #include "lwip/inet.h"
@@ -108,10 +109,19 @@ void print_text_to_printer(const char *printer_ip, const char *text,
   err = send(sock, formatted_text, len, 0);
   if (err < 0) {
     ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
+<<<<<<< HEAD
     TERMINAL_VIEW_ADD_TEXT("Failed to send data to printer\n");
   } else {
     ESP_LOGI(TAG, "Sent %d bytes to the printer", err);
     TERMINAL_VIEW_ADD_TEXT("Successfully sent print job to printer\n");
+=======
+    glog("Failed to send data to printer\n");
+    ghostscript_emit_event("printer_job", "failed");
+  } else {
+    ESP_LOGI(TAG, "Sent %d bytes to the printer", err);
+    glog("Successfully sent print job to printer\n");
+    ghostscript_emit_event("printer_job", "ok");
+>>>>>>> 73ca60d6 (Merge branch 'scripts' into pr/338)
   }
 
   close(sock);

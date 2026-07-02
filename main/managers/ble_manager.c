@@ -10,6 +10,7 @@
 #include "host/ble_hs.h"
 #include "host/util/util.h"
 #include "managers/ble_manager.h"
+#include "managers/ghostscript_runtime.h"
 #include "managers/views/terminal_screen.h"
 #include "nimble/ble.h"
 #include "nimble/nimble_port.h"
@@ -47,6 +48,57 @@ static void notify_handlers(struct ble_gap_event *event, int len) {
     }
 }
 
+<<<<<<< ours
+=======
+int ble_gap_event_general(struct ble_gap_event *event, void *arg) {
+    (void)arg;
+
+    if (!event) {
+        return 0;
+    }
+
+    if (event->type == BLE_GAP_EVENT_DISC) {
+        ble_cb_busy = true;
+
+        if (ble_pending_clear) {
+            ble_cb_busy = false;
+            return 0;
+        }
+
+        static uint32_t disc_log_counter = 0;
+        disc_log_counter++;
+        if ((disc_log_counter % BLE_DISC_LOG_INTERVAL) == 1) {
+            ESP_LOGD(TAG_BLE,
+                     "ble_gap_event_general: %lu discovery events seen; last RSSI=%d len=%u",
+                     (unsigned long)disc_log_counter,
+                     event->disc.rssi,
+                     (unsigned int)event->disc.length_data);
+        }
+        if ((disc_log_counter % BLE_DISC_XP_INTERVAL) == 0) {
+            ghostchi_manager_add_xp(1);
+        }
+        char ble_mac[18];
+        snprintf(ble_mac, sizeof(ble_mac), "%02x:%02x:%02x:%02x:%02x:%02x",
+            event->disc.addr.val[0], event->disc.addr.val[1], event->disc.addr.val[2],
+            event->disc.addr.val[3], event->disc.addr.val[4], event->disc.addr.val[5]);
+        if (!ghostscript_runtime_mark_ble_seen(event->disc.addr.val)) {
+            char ble_payload[32];
+            snprintf(ble_payload, sizeof(ble_payload), "%s|%d", ble_mac, event->disc.rssi);
+            ghostscript_emit_event("ble_device", ble_payload);
+        }
+        notify_handlers(event, event->disc.length_data);
+        ble_cb_busy = false;
+    } else if (event->type == BLE_GAP_EVENT_DISC_COMPLETE) {
+        if (ble_disc_complete_sem != NULL) {
+            xSemaphoreGive(ble_disc_complete_sem);
+        }
+        ghostscript_emit_event("ble_scan_done", "");
+    }
+
+    return 0;
+}
+
+>>>>>>> theirs
 void nimble_host_task(void *param) {
     nimble_port_run();
     nimble_port_freertos_deinit();

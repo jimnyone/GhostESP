@@ -12,6 +12,54 @@
 #include "managers/views/options_screen.h"
 #include "managers/views/terminal_screen.h"
 #include <stdlib.h>
+<<<<<<< HEAD
+=======
+#include <string.h>
+#include <stdio.h>
+#include "esp_wifi.h"
+#include "esp_pm.h"
+#include "driver/ledc.h"
+#include <limits.h> // for UINT32_MAX
+#include "managers/ap_manager.h"
+#include "managers/wifi_manager.h"
+#include "core/serial_manager.h"
+#include "managers/wifi_manager.h"
+#include "managers/rgb_manager.h"
+#include "driver/i2c_master.h"
+#include "soc/soc_caps.h"
+#include "io_manager/i2c_bus_lock.h"
+#ifdef CONFIG_USE_IO_EXPANDER
+#include "io_manager/io_manager.h"
+#endif
+#include "core/screen_mirror.h"
+#include "gui/lvgl_safe.h"
+
+uint32_t theme_palette_get_surface_alt(uint8_t theme);
+uint32_t theme_palette_get_text_muted(uint8_t theme);
+
+#if defined(CONFIG_IDF_TARGET_ESP32C5)
+#ifdef CONFIG_BUILD_CONFIG_TEMPLATE
+#if defined(CONFIG_BUILD_CONFIG_TEMPLATE_SOMETHINGSOMETHING) || defined(CONFIG_BUILD_CONFIG_TEMPLATE_SOMETHINGSOMETHING2)
+#define LVGL_TICK_TASK_STACK_SIZE 8192
+#else
+#define LVGL_TICK_TASK_STACK_SIZE 8192
+#endif
+#else
+#define LVGL_TICK_TASK_STACK_SIZE 8192
+#endif
+#else
+#define LVGL_TICK_TASK_STACK_SIZE 8192
+#endif
+
+#ifndef CONFIG_JC3248W535EN_LCD
+static TaskHandle_t hardware_input_task_handle = NULL;
+static StackType_t *hardware_input_task_stack = NULL;
+static StaticTask_t *hardware_input_task_buffer = NULL;
+#if defined(CONFIG_USE_TDISPLAY_S3) || defined(CONFIG_Waveshare_LCD)
+static i2c_master_bus_handle_t s_touch_i2c_bus = NULL;
+#endif
+#endif
+>>>>>>> 73ca60d6 (Merge branch 'scripts' into pr/338)
 
 #ifdef CONFIG_USE_CARDPUTER
 #include "vendor/keyboard_handler.h"
@@ -469,6 +517,41 @@ void display_manager_destroy_current_view(void) {
 
 View *display_manager_get_current_view(void) { return dm.current_view; }
 
+<<<<<<< HEAD
+=======
+static bool touch_move_events_enabled_for_view_name(const char *view_name) {
+  return view_name &&
+         (strcmp(view_name, "Options Screen") == 0 ||
+          strcmp(view_name, "NFC") == 0 ||
+          strcmp(view_name, "Infrared View") == 0 ||
+          strcmp(view_name, "SubGHz") == 0 ||
+          strcmp(view_name, "Ethernet") == 0 ||
+          strcmp(view_name, "AirspaceMonitorView") == 0 ||
+          strcmp(view_name, "Audio Player") == 0 ||
+          strcmp(view_name, "Main Menu") == 0 ||
+          strcmp(view_name, "Apps Menu") == 0 ||
+          strcmp(view_name, "SD Browser") == 0 ||
+          strcmp(view_name, "GhostScript Runner") == 0 ||
+          strcmp(view_name, "BadUSB") == 0 ||
+          strcmp(view_name, "WardrivingView") == 0 ||
+          strcmp(view_name, "Trackpad") == 0);
+}
+
+static bool touch_move_events_enabled_for_current_view(void) {
+  if (!dm.mutex) return false;
+
+  bool enabled = false;
+  if (xSemaphoreTake(dm.mutex, 0) == pdTRUE) {
+    View *current = dm.current_view;
+    enabled = current && touch_move_events_enabled_for_view_name(current->name);
+    xSemaphoreGive(dm.mutex);
+  }
+  return enabled;
+}
+
+bool display_manager_is_available(void) { return display_manager_init_success; }
+
+>>>>>>> 73ca60d6 (Merge branch 'scripts' into pr/338)
 void display_manager_fill_screen(lv_color_t color) {
   static lv_style_t style;
   lv_style_init(&style);
