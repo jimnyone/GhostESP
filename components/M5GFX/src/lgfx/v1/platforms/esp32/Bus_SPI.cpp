@@ -855,9 +855,10 @@ label_start:
       auto pin_reg = reg(SPI_PIN_REG(_spi_port));
       auto cmd_reg = _spi_cmd_reg;
       auto value = *pin_reg;
-      *pin_reg = value ^ SPI_CK_IDLE_EDGE;
+      volatile uint32_t* pin_reg_ptr = pin_reg;
+      *pin_reg_ptr = value ^ SPI_CK_IDLE_EDGE;
       *cmd_reg = SPI_UPDATE;
-      *pin_reg = value;
+      *pin_reg_ptr = value;
       *cmd_reg = SPI_UPDATE;
       return;
     }
@@ -896,7 +897,8 @@ label_start:
   {
     set_read_len(bit_length);
     auto spi_cmd_reg = _spi_cmd_reg;
-    *spi_cmd_reg = SPI_EXECUTE;
+    volatile uint32_t* spi_cmd_reg_ptr = spi_cmd_reg;
+    *spi_cmd_reg_ptr = SPI_EXECUTE;
     auto spi_w0_reg = _spi_w0_reg;
     uint32_t mask = (32 > bit_length) ? ~getSwap32((1 << (32 - bit_length))-1) : ~0;
     while (*spi_cmd_reg & SPI_USR);
