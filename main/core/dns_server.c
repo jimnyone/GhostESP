@@ -23,6 +23,7 @@
 #include "core/dns_server.h"
 #include "managers/ghostscript_runtime.h"
 #include "managers/sd_card_manager.h"
+>>>>>>> 54_nowe
 #include "lwip/err.h"
 #include "lwip/netdb.h"
 #include "lwip/sockets.h"
@@ -1165,6 +1166,7 @@ void dns_server_task(void *pvParameters) {
                 shutdown(sock, 0);
                 close(sock);
             }
+>>>>>>> 54_nowe
         }
     }
 

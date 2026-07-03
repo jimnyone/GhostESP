@@ -202,3 +202,4 @@ target_include_directories(${COMPONENT_LIB} PRIVATE
     "${idf_path}/components/wpa_supplicant/src"
     "${idf_path}/components/wpa_supplicant/esp_supplicant/src"
 )
+>>>>>>> 54_nowe

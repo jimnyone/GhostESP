@@ -204,6 +204,7 @@ int ble_gap_event_general(struct ble_gap_event *event, void *arg) {
     return 0;
 }
 
+>>>>>>> 54_nowe
 void nimble_host_task(void *param) {
     nimble_port_run();
     nimble_port_freertos_deinit();

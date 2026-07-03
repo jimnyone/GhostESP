@@ -4,6 +4,7 @@
 #include "core/callbacks.h"
 #include "core/serial_manager.h"
 #include "core/utils.h"
+>>>>>>> 54_nowe
 #include "esp_sntp.h"
 #include "esp_mac.h"
 #include "managers/ap_manager.h"
@@ -14,6 +15,7 @@
 #include "attacks/ble/ble_spam.h"
 #include "scans/ble/flipper_scan.h"
 #endif
+>>>>>>> 54_nowe
 #include "managers/dial_manager.h"
 #include "managers/rgb_manager.h"
 #include "managers/settings_manager.h"
@@ -26,6 +28,7 @@
 #include "scans/wifi/http_banner_scan.h"
 #include "scans/wifi/snmp_scan.h"
 #include "scans/wifi/wpa3_compliance.h"
+>>>>>>> 54_nowe
 #include "managers/sd_card_manager.h"
 #include "core/esp_comm_manager.h"
 #include "managers/status_display_manager.h"
@@ -85,6 +88,7 @@
 // Forward declaration - esp_netif_get_netif_impl is not in public API but exists internally
 void* esp_netif_get_netif_impl(esp_netif_t *esp_netif);
 #endif
+>>>>>>> 54_nowe
 #include <esp_timer.h>
 #include <managers/gps_manager.h>
 #include <managers/views/terminal_screen.h>
@@ -171,6 +175,7 @@ static const char *TAG = "Commandline";
 #define DISCOVER_TASK_STACK 6144
 #endif
 #endif
+>>>>>>> 54_nowe
 
 static Command *command_list_head = NULL;
 static Command *command_pool = NULL;
@@ -462,6 +467,7 @@ void cmd_wifi_scan_start(int argc, char **argv) {
             status_display_show_status("Scan Failed");
             return;
         }
+>>>>>>> 54_nowe
     } else {
         wifi_manager_start_scan();
     }
@@ -762,6 +768,7 @@ void cmd_wifi_scan_results(int argc, char **argv) {
     glog("WiFi scan results displaying with OUI matching.\n");
     wifi_manager_print_scan_results_with_oui();
     status_display_show_status("Showing Results");
+>>>>>>> 54_nowe
 }
 
 void handle_list(int argc, char **argv) {
@@ -781,6 +788,7 @@ void handle_list(int argc, char **argv) {
 #endif
     else {
         glog("Usage: list -a (for Wi-Fi scan results)\n");
+>>>>>>> 54_nowe
     }
 }
 
@@ -789,6 +797,7 @@ void handle_beaconspam(int argc, char **argv) {
         glog("Starting Random beacon spam...\n");
         wifi_manager_start_beacon(NULL);
         status_display_show_status("Beacon Random");
+>>>>>>> 54_nowe
         return;
     }
 
@@ -796,6 +805,7 @@ void handle_beaconspam(int argc, char **argv) {
         glog("Starting Rickroll beacon spam...\n");
         wifi_manager_start_beacon("RICKROLL");
         status_display_show_status("Beacon Rickroll");
+>>>>>>> 54_nowe
         return;
     }
 
@@ -803,6 +813,7 @@ void handle_beaconspam(int argc, char **argv) {
         glog("Starting AP List beacon spam...\n");
         wifi_manager_start_beacon("APLISTMODE");
         status_display_show_status("Beacon AP List");
+>>>>>>> 54_nowe
         return;
     }
 
@@ -813,6 +824,7 @@ void handle_beaconspam(int argc, char **argv) {
     } else {
         glog("Usage: beaconspam -r (for Beacon Spam Random)\n");
         status_display_show_status("Beacon Usage");
+>>>>>>> 54_nowe
     }
 }
 
@@ -820,6 +832,7 @@ void handle_stop_spam(int argc, char **argv) {
     wifi_manager_stop_beacon();
     glog("Beacon Spam Stopped...\n");
     status_display_show_status("Beacon Stopped");
+>>>>>>> 54_nowe
 }
 
 void handle_sta_scan(int argc, char **argv) {
@@ -889,6 +902,7 @@ void handle_stop_sae_flood_cmd(int argc, char **argv) {
 void handle_sae_flood_help_cmd(int argc, char **argv) {
     wifi_manager_sae_flood_help();
     status_display_show_status("SAE Help");
+>>>>>>> 54_nowe
 }
 
 void handle_stop_deauth(int argc, char **argv) {
@@ -900,11 +914,13 @@ void handle_stop_deauth(int argc, char **argv) {
     wifi_manager_stop_gtk_abuse();
     glog("All WiFi attacks stopped...\n");
     status_display_show_status("Attacks Off");
+>>>>>>> 54_nowe
 }
 
 void handle_select_cmd(int argc, char **argv) {
     if (argc != 3) {
         glog("Usage: select -a <number[,number,...]> or select -s <number>\n");
+>>>>>>> 54_nowe
         return;
     }
 
@@ -982,6 +998,7 @@ void handle_select_cmd(int argc, char **argv) {
 
 static bool g_dial_cast_all = false;
 
+>>>>>>> 54_nowe
 void discover_task(void *pvParameter) {
     DIALClient client;
     DIALManager manager;
@@ -1065,6 +1082,7 @@ void handle_stop_flipper(int argc, char **argv) {
     if (csv_buffer_has_pending_data()) { // Only flush if there's data in buffer
         glog("Flushed pending CSV data.\n");
         stopped_any = true;
+>>>>>>> 54_nowe
         csv_flush_buffer_to_file();
     }
     csv_file_close();                  // Close any open CSV files
@@ -1350,6 +1368,7 @@ static void sntp_time_sync_callback(struct timeval *tv) {
 }
 #endif
 
+>>>>>>> 54_nowe
 void handle_wifi_connection(int argc, char **argv) {
     const char *ssid;
     const char *password;
@@ -1362,6 +1381,7 @@ void handle_wifi_connection(int argc, char **argv) {
             return;
         }
         glog("Connecting using saved credentials: %s\n", ssid);
+>>>>>>> 54_nowe
     } else {
         char ssid_buffer[128] = {0};
         char password_buffer[128] = {0};
@@ -1392,6 +1412,7 @@ void handle_wifi_connection(int argc, char **argv) {
             }
             if (!found_end) {
                 glog("Error: Missing closing quote for SSID\n");
+>>>>>>> 54_nowe
                 return;
             }
             ssid = ssid_buffer;
@@ -1426,6 +1447,7 @@ void handle_wifi_connection(int argc, char **argv) {
                 }
                 if (!found_end) {
                     glog("Error: Missing closing quote for password\n");
+>>>>>>> 54_nowe
                     return;
                 }
                 password = password_buffer;
@@ -1508,6 +1530,7 @@ void handle_wifi_status(int argc, char **argv)
     }
     
     glog("=== END STATUS ===\n");
+>>>>>>> 54_nowe
 }
 
 #ifndef CONFIG_IDF_TARGET_ESP32S2
@@ -1516,23 +1539,27 @@ void handle_ble_scan_cmd(int argc, char **argv) {
     if (argc > 1 && strcmp(argv[1], "-f") == 0) {
         glog("Starting Find the Flippers.\n");
         flipper_scan_start();
+>>>>>>> 54_nowe
         return;
     }
 
     if (argc > 1 && strcmp(argv[1], "-ds") == 0) {
         glog("Starting BLE Spam Detector.\n");
+>>>>>>> 54_nowe
         ble_start_blespam_detector();
         return;
     }
 
     if (argc > 1 && strcmp(argv[1], "-a") == 0) {
         glog("Starting AirTag Scanner.\n");
+>>>>>>> 54_nowe
         ble_start_airtag_scanner();
         return;
     }
 
     if (argc > 1 && strcmp(argv[1], "-r") == 0) {
         glog("Scanning for Raw Packets\n");
+>>>>>>> 54_nowe
         ble_start_raw_ble_packetscan();
         return;
     }
@@ -1551,6 +1578,7 @@ void handle_ble_scan_cmd(int argc, char **argv) {
     }
 
     glog("Invalid Command Syntax.\n");
+>>>>>>> 54_nowe
 }
 
 #endif
@@ -1559,6 +1587,7 @@ void handle_start_portal(int argc, char **argv) {
     if (argc < 3 || argc > 4) { // Accept 3 or 4 arguments
         glog("Usage: %s <FilePath> <AP_SSID> [PSK]\n", argv[0]);
         glog("PSK is optional for an open AP.\n");
+>>>>>>> 54_nowe
         return;
     }
     const char *url = argv[1];
@@ -1578,6 +1607,7 @@ void handle_start_portal(int argc, char **argv) {
         size_t current_len = strlen(final_url_or_path);
         if (current_len + prefix_len >= MAX_PORTAL_PATH_LEN) {
             glog("Error: Path too long after prepending %s.\n", prefix);
+>>>>>>> 54_nowe
             return;
         }
         memmove(final_url_or_path + prefix_len, final_url_or_path, current_len + 1);
@@ -1589,6 +1619,7 @@ void handle_start_portal(int argc, char **argv) {
     char log_buf[256];
     snprintf(log_buf, sizeof(log_buf), "Starting portal with AP_SSID: %s, PSK: %s, Domain: %s\n", ap_ssid, (strlen(psk) > 0 ? psk : "<Open>"), domain ? domain : "(default)");
     TERMINAL_VIEW_ADD_TEXT("%s", log_buf);
+>>>>>>> 54_nowe
     wifi_manager_start_evil_portal(final_url_or_path, NULL, psk, ap_ssid, domain);
 }
 
@@ -1639,6 +1670,7 @@ void handle_tp_link_test(int argc, char **argv) {
     if (argc != 2) {
         glog("Usage: tp_link_test <on|off|loop>\n");
         status_display_show_status("TP Link Usage");
+>>>>>>> 54_nowe
         return;
     }
 
@@ -1649,6 +1681,7 @@ void handle_tp_link_test(int argc, char **argv) {
     } else if (strcmp(argv[1], "on") != 0 && strcmp(argv[1], "off") != 0) {
         glog("Invalid argument. Use 'on', 'off', or 'loop'.\n");
         status_display_show_status("TP Arg Invalid");
+>>>>>>> 54_nowe
         return;
     }
 
@@ -1679,6 +1712,7 @@ void handle_tp_link_test(int argc, char **argv) {
         if (command_len >= sizeof(encrypted_command)) {
             glog("Command too large to encrypt\n");
             status_display_show_status("TP Cmd Too Big");
+>>>>>>> 54_nowe
             return;
         }
 
@@ -1688,6 +1722,7 @@ void handle_tp_link_test(int argc, char **argv) {
         if (sock < 0) {
             glog("Failed to create socket: errno %d\n", errno);
             status_display_show_status("TP Sock Error");
+>>>>>>> 54_nowe
             return;
         }
 
@@ -1705,6 +1740,7 @@ void handle_tp_link_test(int argc, char **argv) {
 
         glog("Broadcast message sent: %s\n", command);
         status_display_show_status("TP Packet Sent");
+>>>>>>> 54_nowe
 
         struct timeval timeout = {2, 0};
         setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
@@ -1720,6 +1756,7 @@ void handle_tp_link_test(int argc, char **argv) {
             } else {
                 glog("Error receiving response: errno %d\n", errno);
                 status_display_show_status("TP Recv Error");
+>>>>>>> 54_nowe
             }
         } else {
             recv_buf[len] = 0;
@@ -1728,6 +1765,7 @@ void handle_tp_link_test(int argc, char **argv) {
             decrypted_response[len] = 0;
             glog("Response: %s\n", decrypted_response);
             status_display_show_status("TP Reply Recv");
+>>>>>>> 54_nowe
         }
 
         close(sock);
@@ -1860,6 +1898,7 @@ void handle_capture_scan(int argc, char **argv) {
     if (argc < 2 || argc > 4) {
         glog("Error: Incorrect number of arguments.\n");
         status_display_show_status("Capture Usage");
+>>>>>>> 54_nowe
         return;
     }
 
@@ -1915,6 +1954,7 @@ void handle_capture_scan(int argc, char **argv) {
         }
         wifi_manager_start_monitor_mode(wifi_probe_scan_callback);
         status_display_show_status("Capture Probe");
+>>>>>>> 54_nowe
     }
 
     if (strcmp(capturetype, "-deauth") == 0) {
@@ -2003,6 +2043,7 @@ void handle_capture_scan(int argc, char **argv) {
 
     if (strcmp(capturetype, "-wps") == 0) {
         glog("Starting WPS\npacket capture...\n");
+>>>>>>> 54_nowe
         int err = pcap_file_open("wpsscan", PCAP_CAPTURE_WIFI);
 
         should_store_wps = 0;
@@ -2063,6 +2104,7 @@ void handle_capture_scan(int argc, char **argv) {
         pcap_file_close();
         pcap_wireshark_stop();
         status_display_show_status("Capture Stop");
+>>>>>>> 54_nowe
     }
 #ifndef CONFIG_IDF_TARGET_ESP32S2
     if (strcmp(capturetype, "-ble") == 0) {
@@ -2070,6 +2112,7 @@ void handle_capture_scan(int argc, char **argv) {
         TERMINAL_VIEW_ADD_TEXT("Starting BLE packet capture...\n");
         ble_start_capture();
         status_display_show_status("Capture BLE");
+>>>>>>> 54_nowe
     }
 
     if (strcmp(capturetype, "-skimmer") == 0) {
@@ -2084,6 +2127,7 @@ void handle_capture_scan(int argc, char **argv) {
             printf("PCAP capture started\nMonitoring devices\n");
             TERMINAL_VIEW_ADD_TEXT("PCAP capture started\nMonitoring devices\n");
             status_display_show_status("Capture Skimmer");
+>>>>>>> 54_nowe
         }
         // Start skimmer detection
         ble_start_skimmer_detection();
@@ -2114,6 +2158,7 @@ void handle_capture_scan(int argc, char **argv) {
         glog("Error: Unknown capture type '%s'.\n", capturetype);
         status_display_show_status("Capture Unknown");
     }
+>>>>>>> 54_nowe
 }
 
 void stop_portal(int argc, char **argv) {
@@ -4038,6 +4083,7 @@ void handle_startwd(int argc, char **argv) {
     bool helper_hop_set = false;
     bool helper_weighted = false;
     bool helper_weighted_set = false;
+>>>>>>> 54_nowe
 
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-s") == 0) {
@@ -4067,6 +4113,7 @@ void handle_startwd(int argc, char **argv) {
         } else if (strcmp(argv[i], "--weighted") == 0) {
             helper_weighted = true;
             helper_weighted_set = true;
+>>>>>>> 54_nowe
         }
     }
 
@@ -4415,6 +4462,7 @@ void handle_crash(int argc, char **argv) {
     (void)argc;
     (void)argv;
     /* Intentional null pointer write to trigger panic; coredump will be saved to flash. */
+>>>>>>> 54_nowe
     int *ptr = NULL;
     *ptr = 42;
 }
@@ -5411,6 +5459,1000 @@ void handle_gps_info(int argc, char **argv) {
 void handle_ble_wardriving(int argc, char **argv) {
     bool stop_flag = false;
 
+=======
+#if CONFIG_ESP_COREDUMP_ENABLE_TO_FLASH
+/* Read coredump partition and print summary or stream base64 for host decode. */
+static void handle_coredump_cmd(int argc, char **argv) {
+    const esp_partition_t *part = esp_partition_find_first(
+        ESP_PARTITION_TYPE_DATA,
+        ESP_PARTITION_SUBTYPE_DATA_COREDUMP,
+        NULL);
+    if (part == NULL) {
+        glog("No coredump partition found. Check partition table.\n");
+        return;
+    }
+
+    if (argc > 1 && strcmp(argv[1], "erase") == 0) {
+        /* Use partition erase on all targets (esp_core_dump_image_erase can fail on plain ESP32). */
+        size_t esz = part->erase_size;
+        size_t to_erase = (part->size / esz) * esz;
+        if (to_erase == 0) {
+            to_erase = esz;
+        }
+        esp_err_t err = esp_partition_erase_range(part, 0, to_erase);
+        if (err == ESP_OK) {
+            glog("Coredump partition erased.\n");
+        } else {
+            glog("Failed to erase coredump: %s\n", esp_err_to_name(err));
+        }
+        return;
+    }
+
+    const int do_dump = (argc > 1 && strcmp(argv[1], "dump") == 0);
+
+    if (do_dump) {
+        /* Stream partition as base64 so user can save and run: idf.py coredump-info -c <file> */
+        glog("=== COREDUMP BASE64 START ===\n");
+        glog("Save the lines below to a file (e.g. coredump.b64), then run:\n");
+        glog("  idf.py coredump-info -c coredump.b64\n");
+        glog("(Omit the start/end marker lines from the file.)\n");
+        uint8_t buf[768]; /* multiple of 3 for base64 */
+        char b64[1032];
+        size_t offset = 0;
+        while (offset < part->size) {
+            size_t chunk = (part->size - offset) > sizeof(buf) ? sizeof(buf) : (part->size - offset);
+            if (esp_partition_read(part, offset, buf, chunk) != ESP_OK) {
+                glog("\nRead error at offset %u\n", (unsigned)offset);
+                break;
+            }
+            size_t written = 0;
+            int ret = mbedtls_base64_encode((unsigned char *)b64, sizeof(b64), &written, buf, chunk);
+            if (ret != 0) {
+                glog("\nBase64 encode error\n");
+                break;
+            }
+            b64[written] = '\0';
+            glog("%s", b64);
+            offset += chunk;
+        }
+        glog("\n=== COREDUMP BASE64 END ===\n");
+        return;
+    }
+
+    /* Summary: partition info and whether it contains valid coredump data.
+     * ESP-IDF may write a small header (e.g. checksum) before the ELF, so scan
+     * the first 128 bytes for ELF magic (0x7f 'E' 'L' 'F') instead of only offset 0. */
+    uint8_t head[128];
+    size_t head_len = part->size < sizeof(head) ? (size_t)part->size : sizeof(head);
+    if (esp_partition_read(part, 0, head, head_len) != ESP_OK) {
+        glog("Failed to read coredump partition.\n");
+        return;
+    }
+    int elf_offset = -1;
+    for (size_t i = 0; i + 4 <= head_len; i++) {
+        if (head[i] == 0x7f && head[i + 1] == 'E' && head[i + 2] == 'L' && head[i + 3] == 'F') {
+            elf_offset = (int)i;
+            break;
+        }
+    }
+    const int is_elf = (elf_offset >= 0);
+
+    glog("Coredump partition: %s, size %u bytes\n", part->label, (unsigned)part->size);
+
+    /* Use ESP-IDF API to parse and print panic reason from coredump in flash */
+    {
+        char panic_reason[256];
+        esp_err_t err = esp_core_dump_get_panic_reason(panic_reason, sizeof(panic_reason));
+        if (err == ESP_OK && panic_reason[0] != '\0') {
+            glog("Panic reason: %s\n", panic_reason);
+        } else if (err == ESP_ERR_NOT_FOUND) {
+            /* Do not call esp_core_dump_get_summary() here: it uses too much stack and can
+             * cause Stack protection fault in SerialTask (same task as CLI). */
+            glog("Panic reason: (not available on device; run idf.py coredump-info on host)\n");
+        } else {
+            glog("Panic reason: (error %s)\n", esp_err_to_name(err));
+        }
+    }
+
+    if (is_elf) {
+        glog("Coredump data: present (ELF format");
+        if (elf_offset > 0) {
+            glog(", ELF at offset %d", elf_offset);
+        }
+        glog(").\n");
+        glog("For full backtrace run on host: idf.py coredump-info\n");
+    } else {
+        /* Check for empty (all 0xff) or binary format */
+        int empty = 1;
+        for (size_t i = 0; i < head_len && empty; i++) {
+            if (head[i] != 0xff) {
+                empty = 0;
+            }
+        }
+        if (empty != 0) {
+            glog("Coredump data: partition empty (no crash recorded yet).\n");
+        } else {
+            glog("Coredump data: present (binary format).\n");
+            glog("For full backtrace run on host: idf.py coredump-info\n");
+        }
+    }
+}
+#endif /* CONFIG_ESP_COREDUMP_ENABLE_TO_FLASH */
+
+
+// Help command
+void handle_help(int argc, char **argv) {
+    const char *category = (argc > 1) ? argv[1] : "unknown"; // Default to "unknown" if no category is provided to fall through ifs
+
+    // List of all categories to print in order
+    const char *all_categories[] = {
+        "wifi", "ble", "chameleon", "comm", "sd", "led", "gps", "misc", "portal", "printer", "cast", "capture", "beacon", "attack"
+#ifdef CONFIG_HAS_INFRARED
+        , "ir"
+#endif
+#ifdef CONFIG_HAS_CAMERA
+        , "camera"
+#endif
+#ifdef CONFIG_WITH_ETHERNET
+        , "ethernet"
+#endif
+    };
+    int num_categories = sizeof(all_categories) / sizeof(all_categories[0]);
+
+    if (strcmp(category, "all") == 0) {
+        for (int i = 0; i < num_categories; ++i) {
+            // Recursively call this function for each category
+            char *fake_argv[] = { "help", (char *)all_categories[i] };
+            handle_help(2, fake_argv);
+        }
+        return;
+    }
+
+
+    if (strcmp(category, "wifi") == 0) {
+        glog("\nWi-Fi Commands:\n\n");
+        glog("scanap\n");
+        glog("    Description: Start a Wi-Fi access point (AP) scan.\n");
+        glog("    Usage: scanap [seconds]\n\n");
+        glog("scansta\n");
+        glog("    Description: Start scanning for Wi-Fi stations (hops channels).\n");
+        glog("    Usage: scansta\n\n");
+        glog("stopscan\n");
+        glog("    Description: Stop any ongoing Wi-Fi scan.\n");
+        glog("    Usage: stopscan\n\n");
+        glog("attack\n");
+        glog("    Description: Launch an attack (e.g., deauthentication attack).\n");
+        glog("                 Supports multiple selected APs when using 'select -a 1,2,3'.\n");
+        glog("    Usage: attack -d (deauth) | attack -c (channel switch) | attack -e (EAPOL logoff) | attack -s (SAE flood)\n");
+        glog("    Arguments:\n");
+        glog("        -d  : Start deauth attack (supports multiple APs)\n");
+        glog("        -c  : Start channel switch attack (supports multiple APs)\n");
+        glog("        -e  : Start EAPOL logoff attack\n");
+        glog("        -s  : Start SAE flood attack (ESP32-C5/C6 only)\n\n");
+        glog("list\n");
+        glog("    Description: List Wi-Fi scan results or connected stations.\n");
+        glog("    Usage: list -a | list -s | list -airtags\n");
+        glog("    Arguments:\n");
+        glog("        -a  : Show access points from Wi-Fi scan\n");
+        glog("        -s  : List connected stations\n");
+        glog("        -airtags: List discovered AirTags\n\n");
+        glog("wpa3check\n");
+        glog("    Description: Run a WPA3 compliance check on the currently selected AP.\n");
+        glog("                 If no AP is selected, scans all APs and prints a\n");
+        glog("                 summary table with WPA3 presence, transition mode,\n");
+        glog("                 PMF posture, and a short security finding per AP.\n");
+        glog("    Usage: wpa3check (after 'scanap' and optionally 'select -a <index>')\n\n");
+        glog("beaconspam\n");
+        glog("    Description: Start beacon spam with different modes.\n");
+        glog("    Usage: beaconspam [OPTION]\n");
+        glog("    Arguments:\n");
+        glog("        -r   : Start random beacon spam\n");
+        glog("        -rr  : Start Rickroll beacon spam\n");
+        glog("        -l   : Start AP List beacon spam\n");
+        glog("        [SSID]: Use specified SSID for beacon spam\n\n");
+        glog("stopspam\n");
+        glog("    Description: Stop ongoing beacon spam.\n");
+        glog("    Usage: stopspam\n\n");
+        glog("stopdeauth\n");
+        glog("    Description: Stop ongoing deauthentication attack.\n");
+        glog("    Usage: stopdeauth\n\n");
+        glog("select\n");
+        glog("    Description: Select access point(s), station, or AirTag by index from the scan results.\n");
+        glog("    Usage: select -a <num[,num,...]> | select -s <num> | select -airtag <num>\n");
+        glog("    Arguments:\n");
+        glog("        -a      : AP selection index (supports multiple: 1,3,5)\n");
+        glog("        -s      : Station selection index\n");
+        glog("        -airtag : AirTag selection index\n");
+        glog("    Examples:\n");
+        glog("        select -a 4      : Select single AP at index 4\n");
+        glog("        select -a 1,3,5  : Select multiple APs at indices 1, 3, and 5\n\n");
+        glog("scanall\n");
+        glog("    Description: Perform combined AP and Station scan, display results.\n");
+        glog("    Usage: scanall [seconds]\n\n");
+        glog("sweep\n");
+        glog("    Description: Full environment sweep - scans WiFi APs, stations, BLE devices\n");
+        glog("                 and saves comprehensive report to SD card.\n");
+        glog("    Usage: sweep [-w wifi_sec] [-b ble_sec]\n");
+        glog("    Arguments:\n");
+        glog("        -w  : WiFi scan duration per phase in seconds (default: 5)\n");
+        glog("        -b  : BLE scan duration per phase in seconds (default: 5)\n");
+        glog("    Output: /mnt/ghostesp/sweeps/sweep_N.csv\n\n");
+        glog("congestion\n");
+        glog("    Description: Display Wi-Fi channel congestion chart.\n");
+        glog("    Usage: congestion\n\n");
+        glog("connect\n");
+        glog("    Description: Connects to Specific WiFi Network and saves credentials.\n");
+        glog("    Usage: connect <SSID> [Password]\n\n");
+        glog("apcred\n");
+        glog("    Description: Change or reset the GhostNet AP credentials\n");
+        glog("    Usage: apcred <ssid> <password>\n");
+        glog("           apcred -r (reset to defaults)\n");
+        glog("    Arguments:\n");
+        glog("        <ssid>     : New SSID for the AP\n");
+        glog("        <password> : New password (min 8 characters)\n");
+        glog("        -r        : Reset to default (GhostNet/GhostNet)\n\n");
+        glog("apenable\n");
+        glog("    Description: Enable or disable the Access Point across reboots\n");
+        glog("    Usage: apenable <on|off>\n");
+        glog("    Arguments:\n");
+        glog("        on  : Enable the Access Point (requires restart)\n");
+        glog("        off : Disable the Access Point (requires restart)\n\n");
+        glog("listenprobes\n");
+        glog("    Description: Listen for and log probe requests.\n");
+        glog("    Usage: listenprobes [channel] [stop]\n");
+        glog("    Arguments:\n");
+        glog("        [channel] : Listen on specific channel (1-165), omit for channel hopping\n");
+        glog("        stop      : Stop probe request listening\n\n");
+        glog("karma\n");
+        glog("    Description: Start or stop the Karma attack (responds to probe requests with specified or all SSIDs).\n");
+        glog("    Usage: karma start [ssid1 ssid2 ...]\n");
+        glog("           karma stop\n");
+        glog("    Arguments:\n");
+        glog("        start : Begin Karma attack. Optionally specify SSIDs to respond with (default: all known SSIDs).\n");
+        glog("        stop  : Stop Karma attack.\n");
+        glog("    Examples:\n");
+        glog("        karma start\n");
+        glog("        karma start FreeWiFi Starbucks\n");
+        glog("        karma stop\n\n");
+        glog("trackap\n");
+        glog("    Description: track selected ap signal strength (rssi)\n");
+        glog("    Usage: trackap\n");
+        glog("    Note: select an ap first with 'select -a <index>'\n\n");
+        glog("tracksta\n");
+        glog("    Description: track selected station signal strength (rssi)\n");
+        glog("    Usage: tracksta\n");
+        glog("    Note: select a station first with 'select -s <index>'\n\n");
+#if CONFIG_IDF_TARGET_ESP32C5
+        glog("setcountry\n");
+        glog("    Description: Set the Wi-Fi country code.\n");
+        glog("    Usage: setcountry <CC>\n");
+        glog("    Arguments:\n");
+        glog("        <CC> : Country code (\"01\" world-safe) or two-letter ISO (e.g., US)\n");
+        glog("    Supported: 01, AT, AU, BE, BG, BR, CA, CH, CN, CY, CZ, DE, DK, EE, ES, FI, FR, GB, GR, HK, HR, HU,\n");
+        glog("               IE, IN, IS, IT, JP, KR, LI, LT, LU, LV, MT, MX, NL, NO, NZ, PL, PT, RO, SE, SI, SK, TW, US\n\n");
+#endif
+        return;
+    }
+
+#ifndef CONFIG_IDF_TARGET_ESP32S2
+    if (strcmp(category, "ble") == 0) {
+        glog("\nBLE Commands:\n\n");
+        glog("blescan\n");
+        glog("    Description: Handle BLE scanning with various modes.\n");
+        glog("    Usage: blescan [OPTION]\n");
+        glog("    Arguments:\n");
+        glog("        -f   : Start 'Find the Flippers' mode\n");
+        glog("        -ds  : Start BLE spam detector\n");
+        glog("        -a   : Start AirTag scanner\n");
+        glog("        -r   : Scan for raw BLE packets\n");
+        glog("        -s   : Stop BLE scanning\n\n");
+        glog("blespam\n");
+        glog("    Description: Start BLE advertisement spam attacks.\n");
+        glog("    Usage: blespam [OPTION]\n");
+        glog("    Arguments:\n");
+        glog("        -apple     : Apple device spam (AirPods, Apple TV, etc.)\n");
+        glog("        -ms        : Microsoft Swift Pair spam\n");
+        glog("        -samsung   : Samsung Galaxy Watch spam\n");
+        glog("        -google    : Google Fast Pair spam\n");
+        glog("        -random    : Random spam (cycles through all types)\n");
+        glog("        -s         : Stop BLE spam\n\n");
+        glog("blewardriving\n");
+        glog("    Description: Start/Stop BLE wardriving with GPS logging\n");
+        glog("    Usage: blewardriving [-s]\n");
+        glog("    Arguments:\n");
+        glog("        -s  : Stop BLE wardriving\n\n");
+        glog("list -airtags\n");
+        glog("    Description: List discovered AirTags\n");
+        glog("    Usage: list -airtags\n\n");
+        glog("select -airtag <index>\n\n");
+        return;
+    }
+
+    if (strcmp(category, "chameleon") == 0) {
+        glog("\nChameleon Ultra Commands:\n\n");
+        glog("chameleon connect [timeout] [pin]\n");
+        glog("    Description: Connect to a Chameleon Ultra device via BLE\n");
+        glog("    Usage: chameleon connect [timeout_seconds] [pin]\n");
+        glog("    Arguments:\n");
+        glog("        timeout_seconds : Connection timeout (default: 10)\n");
+        glog("        pin            : PIN for authentication (4-6 digits, optional)\n\n");
+        glog("chameleon disconnect\n");
+        glog("    Description: Disconnect from the Chameleon Ultra device\n");
+        glog("    Usage: chameleon disconnect\n\n");
+        glog("chameleon status\n");
+        glog("    Description: Check connection status with Chameleon Ultra\n");
+        glog("    Usage: chameleon status\n\n");
+        glog("chameleon scanhf\n");
+        glog("    Description: Scan for High Frequency (HF) RFID tags\n");
+        glog("    Usage: chameleon scanhf\n\n");
+        glog("chameleon scanlf\n");
+        glog("    Description: Scan for Low Frequency (LF) RFID tags\n");
+        glog("    Usage: chameleon scanlf\n\n");
+        glog("chameleon battery\n");
+        glog("    Description: Get battery information from Chameleon Ultra\n");
+        glog("    Usage: chameleon battery\n\n");
+        glog("chameleon reader\n");
+        glog("    Description: Set Chameleon Ultra to reader mode\n");
+        glog("    Usage: chameleon reader\n\n");
+        glog("chameleon emulator\n");
+        glog("    Description: Set Chameleon Ultra to emulator mode\n");
+        glog("    Usage: chameleon emulator\n\n");
+        return;
+    }
+#endif
+
+    if (strcmp(category, "comm") == 0) {
+        glog("\nCommunication Commands:\n\n");
+        glog("commdiscovery\n    Check discovery status.\n    Usage: commdiscovery\n\n");
+        glog("commconnect\n    Connect to a discovered peer ESP32.\n    Usage: commconnect <peer_name>\n    Example: commconnect ESP_A1B2C3\n\n");
+        glog("commsend\n    Send a command to connected peer ESP32.\n    Usage: commsend <command> [data]\n    Example: commsend scanap\n    Example: commsend hello world\n\n");
+        glog("commstatus\n    Show communication status.\n    Usage: commstatus\n\n");
+        glog("commdisconnect\n    Disconnect from current peer.\n    Usage: commdisconnect\n\n");
+        glog("commsetpins\n    Change communication GPIO pins at runtime.\n    Usage: commsetpins <tx_pin> <rx_pin>\n    Example: commsetpins 4 5\n\n");
+        return;
+    }
+
+    if (strcmp(category, "sd") == 0) {
+        glog("\nSD Card Commands:\n\n");
+        glog("-- File Operations (machine-parsable) --\n");
+        glog("sd status\n    Show SD mount status, type, capacity, usage.\n    Usage: sd status\n\n");
+        glog("sd list\n    List files/dirs with indices.\n    Usage: sd list [path]\n\n");
+        glog("sd info\n    Show file/dir details.\n    Usage: sd info <index|path>\n\n");
+        glog("sd size\n    Get file size.\n    Usage: sd size <index|path>\n\n");
+        glog("sd read\n    Read file (chunked downloads).\n    Usage: sd read <index|path> [offset] [length]\n\n");
+        glog("sd write\n    Create/overwrite file with base64 data.\n    Usage: sd write <path> <base64>\n\n");
+        glog("sd append\n    Append base64 data to file.\n    Usage: sd append <path> <base64>\n\n");
+        glog("sd mkdir\n    Create directory.\n    Usage: sd mkdir <path>\n\n");
+        glog("sd rm\n    Delete file or empty directory.\n    Usage: sd rm <index|path>\n\n");
+        glog("sd tree\n    Recursive listing.\n    Usage: sd tree [path] [depth]\n\n");
+        glog("-- Pin Configuration --\n");
+        glog("sd_config\n    Show current SD GPIO pin configuration.\n    Usage: sd_config\n\n");
+        glog("sd_pins_mmc\n    Set GPIO pins for SDMMC mode.\n    Usage: sd_pins_mmc <clk> <cmd> <d0> <d1> <d2> <d3>\n\n");
+        glog("sd_pins_spi\n    Set GPIO pins for SPI mode.\n    Usage: sd_pins_spi <cs> <clk> <miso> <mosi>\n\n");
+        glog("sd_save_config\n    Save pin config to NVS.\n    Usage: sd_save_config\n\n");
+        return;
+    }
+
+    if (strcmp(category, "led") == 0) {
+        glog("\nLED & RGB Commands:\n\n");
+        glog("rgbmode\n    Control LED effects (rainbow, police, strobe, knight, off)\n    Usage: rgbmode <rainbow|police|strobe|knight|off|color>\n\n");
+        glog("setrgbpins\n    Change RGB LED pins\n    Usage: setrgbpins <red> <green> <blue>\n           (use same value for all pins for single-pin LED strips)\n\n");
+        glog("setrgbcount\n    Configure how many RGB LEDs are attached\n    Usage: setrgbcount <1-512>\n\n");
+        glog("setneopixelbrightness\n    Set maximum neopixel brightness (percent)\n    Usage: setneopixelbrightness <0-100>\n\n");
+        glog("getneopixelbrightness\n    Show current neopixel max brightness (percent)\n    Usage: getneopixelbrightness\n\n");
+        return;
+    }
+
+    if (strcmp(category, "misc") == 0) {
+        glog("\nMiscellaneous Commands:\n\n");
+        glog("help\n");
+        glog("    Description: Display this help message.\n");
+        glog("    Usage: help [category]\n\n");
+        glog("chipinfo\n");
+        glog("    Description: Display chip information including model, revision, and features\n");
+        glog("    Usage: chipinfo\n");
+        glog("    Shows:\n");
+        glog("        - Chip model and revision\n");
+        glog("        - CPU cores and features\n");
+        glog("        - Flash size and memory info\n");
+        glog("        - ESP-IDF version\n\n");
+        glog("crash\n");
+        glog("    Description: Intentionally trigger a crash (for coredump testing).\n");
+        glog("    Usage: crash\n");
+        glog("    The device will panic and save a coredump to flash; use idf.py coredump-info to inspect.\n\n");
+#if CONFIG_ESP_COREDUMP_ENABLE_TO_FLASH
+        glog("coredump [dump|erase]\n");
+        glog("    Description: Read or clear coredump in flash.\n");
+        glog("    Usage: coredump        - Print summary (partition size, whether coredump present).\n");
+        glog("           coredump dump   - Stream coredump as base64; save to file and run idf.py coredump-info -c <file> on host.\n");
+        glog("           coredump erase  - Erase coredump partition (clears saved crash).\n");
+        glog("    With device connected, 'idf.py coredump-info' on host shows full panic reason and backtrace.\n\n");
+#endif
+        glog("timezone\n");
+        glog("    Description: Set the display timezone for the clock view.\n");
+        glog("    Usage: timezone <TZ_STRING>\n\n");
+        glog("webauth\n");
+        glog("    Description: Enable/disable web authentication.\n");
+        glog("    Usage: webauth <enable|disable>\n\n");
+        glog("pineap\n");
+        glog("    Description: Start/Stop detecting WiFi Pineapples.\n");
+        glog("    Usage: pineap [-s]\n");
+        glog("    Arguments:\n");
+        glog("        -s  : Stop PineAP detection\n\n");
+        glog("flockscan\n");
+        glog("    Description: Start Flock Safety camera detection.\n");
+        glog("    Usage: flockscan\n\n");
+        glog("flocklist\n");
+        glog("    Description: List detected Flock cameras.\n");
+        glog("    Usage: flocklist\n\n");
+        glog("flockstop\n");
+        glog("    Description: Stop Flock camera detection.\n");
+        glog("    Usage: flockstop\n\n");
+        glog("Port Scanner\n");
+        glog("    Description: Scan ports on local subnet or specific IP\n");
+        glog("    Usage: scanports local\n");
+        glog("           scanports <IP> [all | start-end]\n");
+        glog("    Arguments:\n");
+        glog("        all  : Scan all ports (1-65535)\n");
+        glog("        start-end : Custom port range (e.g. 80-443)\n");
+        glog("        (no range) : Scan common ports (default)\n\n");
+        glog("scanarp\n");
+        glog("    Description: Perform ARP scan on local network to discover active hosts\n");
+        glog("    Usage: scanarp\n\n");
+        glog("scanssh\n");
+        glog("    Description: Scan a host or local subnet for SSH services and grab banners\n");
+        glog("    Usage: scanssh\n");
+        glog("           scanssh <IP>\n\n");
+        glog("netbiosscan\n");
+        glog("    Description: Scan for NetBIOS Name Service hosts on local subnet or specific IP\n");
+        glog("    Usage: netbiosscan\n");
+        glog("           netbiosscan <IP>\n");
+        glog("           netbiosscan subnet <a.b.c[.0|.]>\n\n");
+        glog("httpbannerscan\n");
+        glog("    Description: Scan for HTTP/HTTPS services and grab Server banners\n");
+        glog("    Usage: httpbannerscan\n");
+        glog("           httpbannerscan <IP>\n");
+        glog("           httpbannerscan subnet <a.b.c[.0|.]>\n\n");
+        glog("snmpprobe\n");
+        glog("    Description: Probe SNMP v1/v2c services with common communities\n");
+        glog("    Usage: snmpprobe\n");
+        glog("           snmpprobe <IP>\n");
+        glog("           snmpprobe subnet <a.b.c[.0|.]>\n\n");
+        glog("settings\n");
+        glog("    Description: Manage NVS stored settings via command line\n");
+        glog("    Usage: settings <command> [arguments]\n");
+        glog("    Commands:\n");
+        glog("        list                    - List all available settings\n");
+        glog("        get <setting>           - Get current value of a setting\n");
+        glog("        set <setting> <value>   - Set a setting to a value\n");
+        glog("        reset [setting]         - Reset setting(s) to defaults\n");
+        glog("        help                    - Show settings help\n");
+        glog("    Examples:\n");
+        glog("        settings list\n");
+        glog("        settings get ap_ssid\n");
+        glog("        settings set rgb_mode 1\n");
+        glog("        settings reset\n\n");
+        glog("    Description: View or change the status display idle animation (status OLED only).\n");
+        glog("    Usage: statusidle [list|set <life|ghost|starfield|hud|matrix|ghosts|spiral|leaves|bouncing|0|1|2|3|4|5|6|7|8>]\n\n");
+        return;
+    }
+    if (strcmp(category, "gps") == 0) {
+        glog("\nGPS Commands:\n\n");
+        glog("gpsinfo\n    Show GPS info.\n    Usage: gpsinfo [-s]\n\n");
+        glog("gpspin\n    Set GPS RX pin for external GPS module.\n    Usage: gpspin <pin>\n\n");
+        glog("startwd\n    Start GPS wardriving.\n    Usage: startwd [-s] [--helper] [--channels <csv>] [--hop <ms>] [--weighted]\n\n");
+        return;
+    }
+    if (strcmp(category, "wigle") == 0) {
+        glog("\nWiGLE Commands:\n\n");
+        glog("wigle API <encoded|name:token>\n    Set WiGLE API credentials (encoded token or legacy format).\n\n");
+        glog("wigle auto on/off\n    Enable/disable auto-upload.\n\n");
+        glog("wigle donate on/off\n    Enable/disable WiGLE donate flag.\n\n");
+        glog("wigle show\n    Show WiGLE settings.\n\n");
+        glog("wigle list\n    Show uploaded CSV memory.\n\n");
+        glog("wigle files [page]\n    List CSVs in /mnt/ghostesp/gps/ for manual upload.\n\n");
+        glog("wigle upload <filename>\n    Upload a specific CSV file.\n\n");
+        glog("wigle upload all\n    Upload all pending queue files.\n\n");
+        glog("wigle stats\n    Show account stats for current API key.\n\n");
+        return;
+    }
+    if (strcmp(category, "portal") == 0) {
+        glog("\nEvil Portal Commands:\n\n");
+        glog("startportal\n");
+        glog("    Description: Start an Evil Portal using a local file or the default embedded page.\n");
+        glog("                 /mnt/ prefix is added automatically to file paths if missing.\n");
+        glog("    Usage: startportal [FilePath] [AP_SSID] [PSK]\n");
+        glog("           PSK is optional for an open network.\n");
+        glog("    Use 'default' as the file path for the default Evil Portal.\n");
+        glog("\n");
+        glog("evilportal\n");
+        glog("    Description: Configure Evil Portal HTML content via UART buffer.\n");
+        glog("    Usage: evilportal -c sethtmlstr\n");
+        glog("    Steps:\n");
+        glog("      1. Run: evilportal -c sethtmlstr\n");
+        glog("      2. Send [HTML/BEGIN] marker over UART\n");
+        glog("      3. Send HTML content over UART\n");
+        glog("      4. Send [HTML/CLOSE] marker over UART\n");
+        glog("      5. Run startportal (will use buffered HTML)\n");
+        glog("\n");
+        glog("stopportal\n");
+        glog("    Description: Stop Evil Portal\n");
+        glog("    Usage: stopportal\n\n");
+        glog("listportals\n    List available Evil Portal files.\n    Usage: listportals\n\n");
+        return;
+    }
+
+    if (strcmp(category, "printer") == 0) {
+        glog("\nPrinter Commands:\n\n");
+        glog("powerprinter\n");
+        glog("    Description: Print Custom Text to a Printer on your LAN (Requires You to Run Connect First)\n");
+        glog("    Usage: powerprinter <Printer IP> <Text> <FontSize> <alignment>\n");
+        glog("    alignment options: CM = Center Middle, TL = Top Left, TR = Top Right, BR = Bottom Right, BL = Bottom Left\n\n");
+        return;
+    }
+
+    if (strcmp(category, "cast") == 0) {
+        glog("\nYouTube Cast Commands:\n\n");
+        glog("dialconnect\n");
+        glog("    Description: Cast a Random Youtube Video on all Smart TV's on your LAN (Requires You to Run Connect First)\n");
+        glog("    Usage: dialconnect\n\n");
+        glog("dialconnect\n");
+        glog("    Cast a random YouTube video to all smart TVs on your LAN.\n");
+        glog("    Usage: dialconnect\n\n");
+        return;
+    }
+
+    if (strcmp(category, "capture") == 0) {
+        glog("\nCapture Commands:\n\n");
+        glog("capture\n");
+        glog("    Description: Start a WiFi Capture (Requires SD Card or Flipper)\n");
+        glog("    Usage: capture [OPTION]\n");
+        glog("    Arguments:\n");
+        glog("        -probe     : Start Capturing Probe Packets\n");
+        glog("        -beacon    : Start Capturing Beacon Packets\n");
+        glog("        -deauth    : Start Capturing Deauth Packets\n");
+        glog("        -raw       : Start Capturing Raw Packets\n");
+        glog("        -wps       : Start Capturing WPS Packets and there Auth Type\n");
+        glog("        -pwn       : Start Capturing Pwnagotchi Packets\n");
+        glog("        -list      : Browse saved PCAPs with +/- hc22000 markers\n");
+        glog("        -export    : Export PCAP to hc22000 (PMKID + M2/M3)\n");
+        glog("                    Usage: capture -export <pcap-file>\n");
+        glog("        -wireshark : Stream raw PCAP to USB/UART for Wireshark\n");
+        glog("                    Usage: capture -wireshark [-c <channel>]\n");
+        glog("                    -c <channel>: Lock to specific channel (1-%d)\n", MAX_WIFI_CHANNEL);
+        #if defined(CONFIG_IDF_TARGET_ESP32C5) || defined(CONFIG_IDF_TARGET_ESP32C6)
+        glog("        -802154    : Start Capturing IEEE 802.15.4 Packets [C5/C6]\n");
+        #endif
+        glog("        -stop      : Stops the active capture\n\n");
+        glog("capture\n");
+        glog("    Start a WiFi packet capture.\n");
+        glog("    Usage: capture [OPTION]\n");
+        #if defined(CONFIG_IDF_TARGET_ESP32C5) || defined(CONFIG_IDF_TARGET_ESP32C6)
+        glog("    Options: -probe, -beacon, -deauth, -raw, -wps, -pwn, -list, -export, -802154, -stop\n\n");
+        #else
+        glog("    Options: -probe, -beacon, -deauth, -raw, -wps, -pwn, -list, -export, -stop\n\n");
+        #endif
+        return;
+    }
+
+    if (strcmp(category, "beacon") == 0) {
+        glog("\nBeacon Spam Commands:\n\n");
+        glog("beaconadd\n    Add an SSID to the beacon spam list.\n    Usage: beaconadd <SSID>\n\n");
+        glog("beaconremove\n    Remove an SSID from the beacon spam list.\n    Usage: beaconremove <SSID>\n\n");
+        glog("beaconclear\n    Clear the beacon spam list.\n    Usage: beaconclear\n\n");
+        glog("beaconshow\n    Show the current beacon spam list.\n    Usage: beaconshow\n\n");
+        glog("beaconspamlist\n    Start beacon spamming using the beacon spam list.\n    Usage: beaconspamlist\n\n");
+        return;
+    }
+
+    if (strcmp(category, "attack") == 0) {
+        glog("\nAttack Commands:\n\n");
+        glog("dhcpstarve\n");
+        glog("    Description: DHCP starvation flood attack\n");
+        glog("    Usage: dhcpstarve start [threads]\n");
+        glog("           dhcpstarve stop\n");
+        glog("           dhcpstarve display\n\n");
+        glog("saeflood\n");
+        glog("    Description: SAE handshake flooding attack (ESP32-C5/C6 only)\n");
+        glog("    Usage: saeflood <password> (requires selected WPA3 AP)\n\n");
+        glog("stopsaeflood\n    Stop SAE flood attack.\n    Usage: stopsaeflood\n\n");
+        glog("saefloodhelp\n    Show detailed SAE flood attack help.\n    Usage: saefloodhelp\n\n");
+        return;
+    }
+    
+#ifdef CONFIG_HAS_INFRARED
+    if (strcmp(category, "ir") == 0) {
+        glog("\nInfrared Commands:\n\n");
+        glog("ir send\n");
+        glog("    Description: Send an IR signal from a file.\n");
+        glog("    Usage: ir send <path> [index]\n\n");
+
+        glog("ir learn\n");
+        glog("    Description: Learn an IR signal and save to file.\n");
+        glog("    Usage: ir learn <path>\n\n");
+        glog("ir list\n");
+        glog("    Description: List IR files in default directory.\n");
+        glog("    Usage: ir list [path]\n\n");
+        glog("ir rx\n");
+        glog("    Description: Receive and display IR signals (Matrix mode).\n");
+        glog("    Usage: ir rx [timeout]\n\n");
+        glog("ir show\n");
+        glog("    Description: Show content of an IR file.\n");
+        glog("    Usage: ir show <path>\n\n");
+        glog("ir universals\n");
+        glog("    Description: Manage universal IR signals (files and built-ins).\n");
+        glog("    Usage: ir universals list [-all]\n");
+        glog("           ir universals send <index>\n");
+        glog("           ir universals sendall <file|TURNHISTVOFF> [delay_ms]\n");
+        glog("           ir universals show <file|TURNHISTVOFF>\n\n");
+        glog("ir dazzler\n");
+        glog("    Description: IR dazzler mode - emit continuous IR to interfere with cameras.\n");
+        glog("    Usage: ir dazzler [stop]\n\n");
+        return;
+    }
+#endif
+
+#ifdef CONFIG_WITH_ETHERNET
+    if (strcmp(category, "ethernet") == 0) {
+        glog("\nEthernet Commands:\n\n");
+        printf("ethup\n");
+        printf("    Description: Initialize and bring up Ethernet interface.\n");
+        printf("    Usage: ethup\n");
+        printf("    Note: Waits for link establishment and DHCP assignment.\n\n");
+        printf("ethdown\n");
+        printf("    Description: Deinitialize and bring down Ethernet interface.\n");
+        printf("    Usage: ethdown\n\n");
+        printf("ethinfo\n");
+        printf("    Description: Display Ethernet connection information.\n");
+        printf("    Usage: ethinfo\n");
+        printf("    Shows: Status, IP address, netmask, gateway, DNS servers, DHCP server\n\n");
+        printf("ethfp\n");
+        printf("    Description: Fingerprint network hosts using mDNS, NetBIOS, and SSDP.\n");
+        printf("    Usage: ethfp\n");
+        printf("    Discovers: Apple devices, Chromecasts, printers, Windows PCs, routers, smart TVs\n\n");
+        printf("etharp\n");
+        printf("    Description: Perform ARP scan on local Ethernet network.\n");
+        printf("    Usage: etharp\n");
+        printf("    Scans: Local subnet (1-254) to discover active hosts\n\n");
+        printf("ethports\n");
+        printf("    Description: Scan TCP ports on a target IP address.\n");
+        printf("    Usage: ethports [IP] [all | start-end]\n");
+        printf("    Arguments:\n");
+        printf("        [IP]      : Target IP address (default: gateway)\n");
+        printf("        all       : Scan all ports (1-65535)\n");
+        printf("        start-end  : Custom port range (e.g., 80-443)\n");
+        printf("        (no range): Scan common ports (default)\n");
+        printf("    Examples:\n");
+        printf("        ethports\n");
+        printf("        ethports 192.168.1.1\n");
+        printf("        ethports 192.168.1.1 all\n");
+        printf("        ethports 192.168.1.1 80-443\n\n");
+        printf("ethping\n");
+        printf("    Description: Perform ICMP ping scan on local Ethernet network.\n");
+        printf("    Usage: ethping\n");
+        printf("    Scans: Local subnet (1-254) to find alive hosts\n\n");
+        printf("ethdns\n");
+        printf("    Description: Perform DNS lookup or reverse DNS lookup.\n");
+        printf("    Usage: ethdns <hostname>\n");
+        printf("           ethdns reverse <ip_address>\n");
+        printf("    Examples:\n");
+        printf("        ethdns google.com\n");
+        printf("        ethdns reverse 8.8.8.8\n\n");
+        printf("ethtrace\n");
+        printf("    Description: Perform traceroute to a target host.\n");
+        printf("    Usage: ethtrace <hostname_or_ip> [max_hops]\n");
+        printf("    Arguments:\n");
+        printf("        hostname_or_ip : Target hostname or IP address\n");
+        printf("        max_hops       : Maximum number of hops (default: 30, max: 64)\n");
+        printf("    Examples:\n");
+        printf("        ethtrace 8.8.8.8\n");
+        printf("        ethtrace google.com 30\n\n");
+        printf("ethstats\n");
+        printf("    Description: Display Ethernet network statistics.\n");
+        printf("    Usage: ethstats\n");
+        printf("    Shows: Link status, IP info, MAC address, packet statistics, ARP statistics\n\n");
+        printf("ethconfig\n");
+        printf("    Description: Configure Ethernet IP settings (DHCP or static).\n");
+        printf("    Usage: ethconfig <command>\n");
+        printf("    Commands:\n");
+        printf("        dhcp                    - Use DHCP (automatic IP)\n");
+        printf("        static <ip> <netmask> <gateway> - Set static IP\n");
+        printf("        show                    - Show current configuration\n");
+        printf("    Examples:\n");
+        printf("        ethconfig dhcp\n");
+        printf("        ethconfig static 192.168.1.100 255.255.255.0 192.168.1.1\n");
+        printf("        ethconfig show\n\n");
+        printf("ethmac\n");
+        printf("    Description: View or set Ethernet MAC address.\n");
+        printf("    Usage: ethmac\n");
+        printf("           ethmac set <xx:xx:xx:xx:xx:xx>\n");
+        printf("    Examples:\n");
+        printf("        ethmac\n");
+        printf("        ethmac set 02:00:00:00:00:01\n");
+        printf("    Note: MAC address changes may require reinitialization\n\n");
+        printf("ethserv\n");
+        printf("    Description: Service discovery and banner grabbing on a target IP.\n");
+        printf("    Usage: ethserv [ip_address]\n");
+        printf("    Arguments:\n");
+        printf("        [ip_address] : Target IP address (default: gateway)\n");
+        printf("    Scans: Common services (FTP, SSH, Telnet, SMTP, HTTP, HTTPS, etc.)\n");
+        printf("    Example: ethserv 192.168.1.1\n\n");
+        printf("ethntp\n");
+        printf("    Description: Query NTP server and synchronize system time.\n");
+        printf("    Usage: ethntp [ntp_server]\n");
+        printf("    Arguments:\n");
+        printf("        [ntp_server] : NTP server hostname or IP (default: pool.ntp.org)\n");
+        printf("    Examples:\n");
+        printf("        ethntp\n");
+        printf("        ethntp pool.ntp.org\n");
+        printf("        ethntp time.google.com\n");
+        printf("    Note: Requires Ethernet connection to be active\n\n");
+        printf("ethhttp\n");
+        printf("    Description: Send HTTP/HTTPS GET request to a server and display response.\n");
+        printf("    Usage: ethhttp <url> [lines|all]\n");
+        printf("    Arguments:\n");
+        printf("        <url>  : Full URL including protocol (http:// or https://)\n");
+        printf("        [lines]: Optional - show first N lines (default: 25, use 'all' for full)\n");
+        printf("    Examples:\n");
+        printf("        ethhttp http://example.com  (shows first 25 lines)\n");
+        printf("        ethhttp https://www.google.com 50  (shows first 50 lines)\n");
+        printf("        ethhttp http://192.168.1.1/index.html all  (shows full response)\n");
+        printf("        ethhttp https://example.com:8443/api/data 100\n");
+        printf("    Note: Default is 25 lines. Use 'all' for complete responses. HTTPS uses TLS 1.2.\n\n");
+        TERMINAL_VIEW_ADD_TEXT("ethup, ethdown, ethinfo, ethfp, etharp, ethports, ethping, ethdns, ethtrace, ethstats, ethconfig, ethmac, ethserv, ethntp, ethhttp\n");
+        return;
+    }
+#endif
+
+#ifdef CONFIG_HAS_CAMERA
+    if (strcmp(category, "camera") == 0) {
+        glog("\nCamera Commands:\n\n");
+        glog("camerastream start\n");
+        glog("    Description: Start the live camera stream server.\n");
+        glog("    Usage: camerastream start\n");
+        glog("    Access the stream at http://ghostesp.local/camera\n\n");
+        glog("camerastream stop\n");
+        glog("    Description: Stop the camera stream and release the camera.\n");
+        glog("    Usage: camerastream stop\n\n");
+        glog("camerastream status\n");
+        glog("    Description: Show current stream state.\n");
+        glog("    Usage: camerastream status\n\n");
+        glog("camerastream quality <1-100>\n");
+        glog("    Description: Set JPEG compression quality.\n");
+        glog("    Usage: camerastream quality 80\n\n");
+        glog("camerastream resolution <name>\n");
+        glog("    Description: Set camera resolution.\n");
+        glog("    Usage: camerastream resolution SVGA\n");
+        glog("    Options: QQVGA, QVGA, VGA, SVGA, XGA, SXGA, UXGA\n\n");
+        glog("camerastream fps <1-30>\n");
+        glog("    Description: Set target framerate.\n");
+        glog("    Usage: camerastream fps 15\n\n");
+        glog("motion start\n");
+        glog("    Description: Start on-device motion detection.\n");
+        glog("    Usage: motion start\n\n");
+        glog("motion stop\n");
+        glog("    Description: Stop motion detection.\n");
+        glog("    Usage: motion stop\n\n");
+        glog("motion status\n");
+        glog("    Description: Show motion detector state.\n");
+        glog("    Usage: motion status\n\n");
+        glog("motion threshold <1-255>\n");
+        glog("    Description: Set pixel difference threshold.\n");
+        glog("    Usage: motion threshold 30\n\n");
+        glog("motion interval <100-10000>\n");
+        glog("    Description: Set frame interval in milliseconds.\n");
+        glog("    Usage: motion interval 500\n\n");
+        glog("motion percent <1-100>\n");
+        glog("    Description: Set trigger percentage.\n");
+        glog("    Usage: motion percent 10\n\n");
+        glog("motion sample <1-32>\n");
+        glog("    Description: Compare every Nth pixel.\n");
+        glog("    Usage: motion sample 4\n\n");
+        glog("motion snap <on|off>\n");
+        glog("    Description: Enable/disable SD card snapshots.\n");
+        glog("    Usage: motion snap on\n\n");
+        glog("motion image <on|off>\n");
+        glog("    Description: Attach image to Discord alerts.\n");
+        glog("    Usage: motion image on\n\n");
+        glog("motion discord <url|off>\n");
+        glog("    Description: Set or disable Discord webhook URL.\n");
+        glog("    Usage: motion discord https://discord.com/api/webhooks/...\n\n");
+        glog("motion cooldown <ms>\n");
+        glog("    Description: Set minimum time between webhook alerts.\n");
+        glog("    Usage: motion cooldown 60000\n\n");
+        glog("Note: Camera stream and motion detection are mutually exclusive.\n\n");
+        return;
+    }
+#endif
+
+    glog("\nGhost ESP Command Categories:\n\n");
+
+    glog("  help wifi      - Wi-Fi commands\n");
+    glog("  help ble       - Bluetooth/BLE commands\n");
+    glog("  help comm      - ESP32 communication commands\n");
+    glog("  help sd        - SD card commands\n");
+    glog("  help led       - LED/RGB commands\n");
+    glog("  help gps       - GPS commands\n");
+    glog("  help wigle     - WiGLE commands\n");
+    glog("  help misc      - Miscellaneous commands\n");
+    glog("  help portal    - Evil Portal commands\n");
+    glog("  help printer   - Printer commands\n");
+    glog("  help cast      - YouTube cast commands\n");
+    glog("  help capture   - Wi-Fi packet capture commands\n");
+    glog("  help beacon    - Beacon spam commands\n");
+    glog("  help attack    - Attack/flood commands\n");
+#ifdef CONFIG_HAS_INFRARED
+    glog("  help ir        - Infrared commands\n");
+#endif
+#ifdef CONFIG_HAS_CAMERA
+    glog("  help camera    - Camera & motion detection commands\n");
+#endif
+#ifdef CONFIG_WITH_ETHERNET
+    glog("  help ethernet  - Ethernet commands\n");
+#endif
+    glog("  help all       - All commands\n\n");
+
+    glog("Type 'help <category>' for details on that category.\n\n");
+}
+
+void handle_capture(int argc, char **argv) {
+    if (argc < 2) {
+        #if defined(CONFIG_IDF_TARGET_ESP32C5) || defined(CONFIG_IDF_TARGET_ESP32C6)
+        glog("Usage: capture [-probe|-beacon|-deauth|-raw|-ble|-zigbee]\n");
+        #else
+        glog("Usage: capture [-probe|-beacon|-deauth|-raw|-ble]\n");
+        #endif
+        status_display_show_status("Capture Usage");
+        return;
+    }
+#ifndef CONFIG_IDF_TARGET_ESP32S2
+    if (strcmp(argv[1], "-ble") == 0) {
+        glog("Starting BLE packet capture...\n");
+        ble_start_capture();
+        status_display_show_status("Capture BLE");
+    }
+#endif
+}
+
+void handle_gps_pin(int argc, char **argv) {
+    if (argc < 2) {
+        uint8_t current_pin = settings_get_gps_rx_pin(&G_Settings);
+        if (current_pin > 0) {
+            glog("GPS RX pin: IO%d\n", current_pin);
+        } else {
+            glog("GPS RX pin: not set (using default)\n");
+        }
+        glog("Usage: gpspin <pin>\n");
+        return;
+    }
+
+    int pin = atoi(argv[1]);
+    if (pin < 0 || pin > 48) {
+        glog("Invalid pin. Must be 0-48.\n");
+        return;
+    }
+
+    settings_set_gps_rx_pin(&G_Settings, (uint8_t)pin);
+    settings_save(&G_Settings);
+    glog("GPS RX pin set to IO%d. Restart GPS to apply.\n", pin);
+    TERMINAL_VIEW_ADD_TEXT("GPS pin set to IO%d\n", pin);
+}
+
+void handle_gps_info(int argc, char **argv) {
+    bool stop_flag = false;
+
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "-s") == 0) {
+            stop_flag = true;
+            break;
+        }
+    }
+
+    if (stop_flag) {
+        if (gps_info_task_handle != NULL) {
+            vTaskDelete(gps_info_task_handle);
+            gps_info_task_handle = NULL;
+            
+            // Free the manually allocated stack and TCB
+            if (gps_task_stack) {
+                heap_caps_free(gps_task_stack);
+                gps_task_stack = NULL;
+            }
+            if (gps_task_tcb) {
+                heap_caps_free(gps_task_tcb);
+                gps_task_tcb = NULL;
+            }
+            
+            gps_manager_deinit(&g_gpsManager);
+            gps_manager_set_peer_gps_preferred(false);
+            gps_manager_clear_peer_fix();
+            printf("GPS info display stopped.\n");
+            TERMINAL_VIEW_ADD_TEXT("GPS info display stopped.\n");
+            status_display_show_status("GPS Info Off");
+        }
+    } else {
+        if (gps_info_task_handle == NULL) {
+            bool peer_connected = esp_comm_manager_is_connected();
+            gps_manager_set_peer_gps_preferred(peer_connected);
+            if (!peer_connected) {
+                gps_manager_clear_peer_fix();
+            }
+            if (!peer_connected) {
+                gps_manager_init(&g_gpsManager);
+            } else if (g_gpsManager.isinitilized) {
+                gps_manager_deinit(&g_gpsManager);
+            }
+
+            // Wait a moment for GPS initialization
+            vTaskDelay(pdMS_TO_TICKS(100));
+
+            // Start info display task with PSRAM preference
+            gps_info_task_handle = NULL;
+            
+            // Allocate stack in PSRAM if available, fallback to internal RAM
+            const size_t stack_bytes_target = 8192;
+            const size_t stack_words = (stack_bytes_target + sizeof(StackType_t) - 1) / sizeof(StackType_t);
+            const size_t stack_size = stack_words * sizeof(StackType_t);
+            gps_task_stack = NULL;
+            
+#if CONFIG_SPIRAM_ALLOW_STACK_EXTERNAL_MEMORY
+            gps_task_stack = (StackType_t*)heap_caps_malloc(stack_size, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
+#endif
+            if (!gps_task_stack) {
+                gps_task_stack = (StackType_t*)heap_caps_malloc(stack_size, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
+            }
+            
+            if (!gps_task_stack) {
+                gps_manager_deinit(&g_gpsManager);
+                printf("GPS info failed to allocate stack.\n");
+                TERMINAL_VIEW_ADD_TEXT("GPS info failed to allocate stack.\n");
+                status_display_show_status("GPS Info Fail");
+                return;
+            }
+            
+            gps_task_tcb = (StaticTask_t*)heap_caps_malloc(sizeof(StaticTask_t), MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
+            if (!gps_task_tcb) {
+                heap_caps_free(gps_task_stack);
+                gps_task_stack = NULL;
+                gps_manager_deinit(&g_gpsManager);
+                printf("GPS info failed to allocate TCB.\n");
+                TERMINAL_VIEW_ADD_TEXT("GPS info failed to allocate TCB.\n");
+                status_display_show_status("GPS Info Fail");
+                return;
+            }
+            
+            TaskHandle_t created_task = xTaskCreateStatic(gps_info_display_task, "gps_info", stack_words, NULL, 1, gps_task_stack, gps_task_tcb);
+            if (created_task == NULL) {
+                heap_caps_free(gps_task_stack);
+                heap_caps_free(gps_task_tcb);
+                gps_task_stack = NULL;
+                gps_task_tcb = NULL;
+                gps_manager_deinit(&g_gpsManager);
+                printf("GPS info failed to start.\n");
+                TERMINAL_VIEW_ADD_TEXT("GPS info failed to start.\n");
+                status_display_show_status("GPS Info Fail");
+                return;
+            }
+            gps_info_task_handle = created_task;
+            printf("GPS info started.\n");
+            TERMINAL_VIEW_ADD_TEXT("GPS info started.\n");
+            if (peer_connected) {
+                printf("GPS source: peer stream preferred.\n");
+                TERMINAL_VIEW_ADD_TEXT("GPS source: peer stream preferred.\n");
+            } else {
+                printf("GPS source: local parser.\n");
+                TERMINAL_VIEW_ADD_TEXT("GPS source: local parser.\n");
+            }
+            status_display_show_status("GPS Info On");
+        }
+    }
+}
+
+#ifndef CONFIG_IDF_TARGET_ESP32S2
+void handle_ble_wardriving(int argc, char **argv) {
+    bool stop_flag = false;
+
+>>>>>>> 73ca60d6 (Merge branch 'scripts' into pr/338)
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-s") == 0) {
             stop_flag = true;
@@ -5440,6 +6482,7 @@ void handle_ble_wardriving(int argc, char **argv) {
             gps_manager_init(&g_gpsManager);
         } else if (peer_connected && g_gpsManager.isinitilized) {
             gps_manager_deinit(&g_gpsManager);
+>>>>>>> 54_nowe
         }
 
         // Open CSV file for BLE wardriving
@@ -5462,6 +6505,7 @@ void handle_ble_wardriving(int argc, char **argv) {
             TERMINAL_VIEW_ADD_TEXT("BLE wardriving GPS source: local parser.\n");
         }
         status_display_show_status("BLE Drive On");
+>>>>>>> 54_nowe
     }
 }
 #endif
@@ -5480,6 +6524,7 @@ void handle_pineap_detection(int argc, char **argv) {
         wifi_manager_stop_monitor_mode();
         pcap_file_close();
         status_display_show_status("PineAP Stop");
+>>>>>>> 54_nowe
         return;
     }
     // Open PCAP file for logging detections
@@ -5487,6 +6532,7 @@ void handle_pineap_detection(int argc, char **argv) {
     if (err != ESP_OK) {
         glog("Warning: Failed to open PCAP file for logging\n");
         status_display_show_status("PCAP Warn");
+>>>>>>> 54_nowe
     }
 
     // Start PineAP detection with channel hopping
@@ -5495,6 +6541,7 @@ void handle_pineap_detection(int argc, char **argv) {
 
     glog("Monitoring for Pineapples\n");
     status_display_show_status("PineAP Watch");
+>>>>>>> 54_nowe
 }
 
 
@@ -5503,6 +6550,7 @@ void handle_apcred(int argc, char **argv) {
         glog("Usage: apcred <ssid> <password>\n");
         glog("       apcred -r (reset to defaults)\n");
         status_display_show_status("APCred Usage");
+>>>>>>> 54_nowe
         return;
     }
                 
@@ -5518,18 +6566,21 @@ void handle_apcred(int argc, char **argv) {
             printf("Error resetting AP: %s\n", esp_err_to_name(err));
             TERMINAL_VIEW_ADD_TEXT("Error resetting AP:\n%s\n", esp_err_to_name(err));
             status_display_show_status("AP Reset Fail");
+>>>>>>> 54_nowe
             return;
         }
 
         printf("AP credentials reset to defaults (SSID: GhostNet, Password: GhostNet)\n");
         TERMINAL_VIEW_ADD_TEXT("AP reset to defaults:\nSSID: GhostNet\nPSK: GhostNet\n");
         status_display_show_status("AP Reset");
+>>>>>>> 54_nowe
         return;
     }
 
     if (argc != 3) {
         glog("Error: Incorrect number of arguments.\n");
         status_display_show_status("APCred Args");
+>>>>>>> 54_nowe
         return;
     }
 
@@ -5551,6 +6602,7 @@ void handle_apcred(int argc, char **argv) {
     if (strlen(new_password) > 63) {
         glog("Error: Password must be 63 characters or less\n");
         status_display_show_status("Password Too Long");
+>>>>>>> 54_nowe
         return;
     }
 
@@ -5568,6 +6620,7 @@ void handle_apcred(int argc, char **argv) {
     };
     snprintf((char *)ap_config.ap.ssid, sizeof(ap_config.ap.ssid), "%s", new_ssid);
     snprintf((char *)ap_config.ap.password, sizeof(ap_config.ap.password), "%s", new_password);
+>>>>>>> 54_nowe
     
     // Force the new config immediately
     esp_wifi_set_config(WIFI_IF_AP, &ap_config);
@@ -5580,6 +6633,7 @@ void handle_apcred(int argc, char **argv) {
     if (strcmp(saved_ssid, new_ssid) != 0 || strcmp(saved_password, new_password) != 0) {
         glog("Error: Failed to save AP credentials\n");
         status_display_show_status("Save Failed");
+>>>>>>> 54_nowe
         return;
     }
 
@@ -5613,6 +6667,7 @@ void handle_rgb_mode(int argc, char **argv) {
             vTaskDelete(rgb_effect_task_handle);
             rgb_effect_task_handle = NULL;
         }
+>>>>>>> 54_nowe
     }
 
     // Check for built-in modes first.
@@ -5676,6 +6731,7 @@ void handle_rgb_mode(int argc, char **argv) {
             vTaskDelete(rgb_effect_task_handle);
             rgb_effect_task_handle = NULL;
         }
+>>>>>>> 54_nowe
     } else {
         // Otherwise, treat the argument as a color name.
         typedef struct {
@@ -5695,11 +6751,13 @@ void handle_rgb_mode(int argc, char **argv) {
             { "orange",      255, 165, 0,   RGB_MODE_ORANGE },
             { "white",       255, 255, 255, RGB_MODE_WHITE },
             { "pink",        255, 192, 203, RGB_MODE_PINK }
+>>>>>>> 54_nowe
         };
         const int num_colors = sizeof(supported_colors) / sizeof(supported_colors[0]);
         int found = 0;
         uint8_t r, g, b;
         RGBMode chosen_mode = RGB_MODE_NORMAL;
+>>>>>>> 54_nowe
         for (int i = 0; i < num_colors; i++) {
             // Use case-insensitive compare.
             if (strcasecmp(argv[1], supported_colors[i].name) == 0) {
@@ -5707,6 +6765,7 @@ void handle_rgb_mode(int argc, char **argv) {
                 g = supported_colors[i].g;
                 b = supported_colors[i].b;
                 chosen_mode = supported_colors[i].mode;
+>>>>>>> 54_nowe
                 found = 1;
                 break;
             }
@@ -5714,6 +6773,7 @@ void handle_rgb_mode(int argc, char **argv) {
         if (!found) {
             glog("Unknown color '%s'. Supported colors: red, green, blue, yellow, twh-purple, cyan, orange, white, pink.\n", argv[1]);
             status_display_show_status("Color Invalid");
+>>>>>>> 54_nowe
             return;
         }
         // Set each LED to the selected static color.
@@ -5726,6 +6786,7 @@ void handle_rgb_mode(int argc, char **argv) {
         settings_save(&G_Settings);
         glog("Static color mode activated: %s\n", argv[1]);
         status_display_show_status("RGB Static");
+>>>>>>> 54_nowe
     }
 }
 
@@ -5736,6 +6797,7 @@ void handle_setrgb(int argc, char **argv) {
         status_display_show_status("SetRGB Usage");
         return;
     }
+>>>>>>> 54_nowe
     gpio_num_t red_pin = (gpio_num_t)atoi(argv[1]);
     gpio_num_t green_pin = (gpio_num_t)atoi(argv[2]);
     gpio_num_t blue_pin = (gpio_num_t)atoi(argv[3]);
@@ -5781,60 +6843,44 @@ void handle_setrgb(int argc, char **argv) {
             status_display_show_status("RGB Init Fail");
         }
     }
-}
 
-void handle_setrgbcount(int argc, char **argv) {
-    if (argc != 2) {
-        glog("Usage: setrgbcount <1-512>\n");
-        status_display_show_status("Count Usage");
-        return;
-    }
-
-    int count = atoi(argv[1]);
-    if (count < 1 || count > 512) {
-        glog("RGB LED count must be between 1 and 512\n");
-        status_display_show_status("Count Invalid");
-        return;
-    }
-
-    settings_set_rgb_led_count(&G_Settings, (uint16_t)count);
-
-    int32_t data_pin = settings_get_rgb_data_pin(&G_Settings);
-    int32_t red_pin, green_pin, blue_pin;
-    settings_get_rgb_separate_pins(&G_Settings, &red_pin, &green_pin, &blue_pin);
-
-    esp_err_t ret = ESP_OK;
-    bool attempted_reinit = false;
-
-    if (data_pin != GPIO_NUM_NC) {
+    esp_err_t ret;
+    if (red_pin == green_pin && green_pin == blue_pin) {
         rgb_manager_deinit(&rgb_manager);
-        ret = rgb_manager_init(&rgb_manager, (gpio_num_t)data_pin, count, LED_PIXEL_FORMAT_GRB,
-                               LED_MODEL_WS2812, GPIO_NUM_NC, GPIO_NUM_NC, GPIO_NUM_NC);
-        attempted_reinit = true;
-    } else if (red_pin != GPIO_NUM_NC && green_pin != GPIO_NUM_NC && blue_pin != GPIO_NUM_NC) {
-        rgb_manager_deinit(&rgb_manager);
-        ret = rgb_manager_init(&rgb_manager, GPIO_NUM_NC, count, LED_PIXEL_FORMAT_GRB,
-                               LED_MODEL_WS2812, (gpio_num_t)red_pin, (gpio_num_t)green_pin, (gpio_num_t)blue_pin);
-        attempted_reinit = true;
-    }
-
-    settings_save(&G_Settings);
-
-    if (attempted_reinit && ret == ESP_OK) {
-        glog("RGB LED count set to %d and applied.\n", count);
-        status_display_show_status("RGB Count Set");
-    } else if (attempted_reinit) {
-        glog("RGB count saved but reinit failed: %s\n", esp_err_to_name(ret));
-        status_display_show_status("RGB Reinit NG");
+        ret = rgb_manager_init(&rgb_manager, red_pin, num_leds, LED_PIXEL_FORMAT_GRB, LED_MODEL_WS2812,
+                               GPIO_NUM_NC, GPIO_NUM_NC, GPIO_NUM_NC);
+        if (ret == ESP_OK) {
+            settings_set_rgb_data_pin(&G_Settings, red_pin);
+            settings_set_rgb_separate_pins(&G_Settings, -1, -1, -1);
+            settings_save(&G_Settings);
+            glog("Single-pin RGB configured on GPIO %d and saved.\n", red_pin);
+            status_display_show_status("RGB Single");
+        } else {
+            glog("Failed to init RGB on pin %d: %s\n", red_pin, esp_err_to_name(ret));
+            status_display_show_status("RGB Init Fail");
+        }
     } else {
-        glog("RGB count set to %d. Configure pins with setrgbpins to apply.\n", count);
-        status_display_show_status("RGB Count Saved");
+        rgb_manager_deinit(&rgb_manager);
+        ret = rgb_manager_init(&rgb_manager, GPIO_NUM_NC, num_leds, LED_PIXEL_FORMAT_GRB, LED_MODEL_WS2812,
+                               red_pin, green_pin, blue_pin);
+        if (ret == ESP_OK) {
+            settings_set_rgb_data_pin(&G_Settings, -1);
+            settings_set_rgb_separate_pins(&G_Settings, red_pin, green_pin, blue_pin);
+            settings_save(&G_Settings);
+            glog("RGB pins updated to R:%d G:%d B:%d and saved.\n", red_pin, green_pin, blue_pin);
+            status_display_show_status("RGB Pins Set");
+        } else {
+            glog("Failed to init RGB pins R:%d G:%d B:%d: %s\n", red_pin, green_pin, blue_pin, esp_err_to_name(ret));
+            status_display_show_status("RGB Init Fail");
+>>>>>>> 73ca60d6 (Merge branch 'scripts' into pr/338)
+        }
     }
 }
 
 void handle_sd_config(int argc, char **argv) {
   sd_card_print_config();
   status_display_show_status("SD Config");
+>>>>>>> 54_nowe
 }
 
 void handle_sd_pins_mmc(int argc, char **argv) {
@@ -5843,6 +6889,7 @@ void handle_sd_pins_mmc(int argc, char **argv) {
     glog("Sets pins for SDMMC mode (only effective if compiled for MMC).\n");
     glog("Example: sd_pins_mmc 19 18 20 21 22 23\n");
     status_display_show_status("SD MMC Usage");
+>>>>>>> 54_nowe
     return;
   }
   
@@ -5857,11 +6904,13 @@ void handle_sd_pins_mmc(int argc, char **argv) {
       clk > 40 || cmd > 40 || d0 > 40 || d1 > 40 || d2 > 40 || d3 > 40) {
     glog("Invalid GPIO pins. Pins must be between 0 and 40.\n");
     status_display_show_status("Pins Invalid");
+>>>>>>> 54_nowe
     return;
   }
   
   sd_card_set_mmc_pins(clk, cmd, d0, d1, d2, d3);
   status_display_show_status("SD MMC Set");
+>>>>>>> 54_nowe
 }
 
 void handle_sd_pins_spi(int argc, char **argv) {
@@ -5870,6 +6919,7 @@ void handle_sd_pins_spi(int argc, char **argv) {
     glog("Sets pins for SPI mode (only effective if compiled for SPI).\n");
     glog("Example: sd_pins_spi 5 18 19 23\n");
     status_display_show_status("SD SPI Usage");
+>>>>>>> 54_nowe
     return;
   }
   
@@ -5882,11 +6932,13 @@ void handle_sd_pins_spi(int argc, char **argv) {
       cs > 40 || clk > 40 || miso > 40 || mosi > 40) {
     glog("Invalid GPIO pins. Pins must be between 0 and 40.\n");
     status_display_show_status("Pins Invalid");
+>>>>>>> 54_nowe
     return;
   }
   
   sd_card_set_spi_pins(cs, clk, miso, mosi);
   status_display_show_status("SD SPI Set");
+>>>>>>> 54_nowe
 }
 
 void handle_sd_save_config(int argc, char **argv) {
@@ -6535,11 +7587,13 @@ void handle_sd_cmd(int argc, char **argv) {
 
     glog("SD:ERR:unknown_subcommand:%s\n", sub);
     sd_cli_cleanup();
+>>>>>>> 54_nowe
 }
 
 void handle_congestion_cmd(int argc, char **argv) {
     wifi_manager_start_scan();
     status_display_show_status("Congest Scan");
+>>>>>>> 54_nowe
 
     uint16_t ap_count = 0;
     wifi_ap_record_t *ap_records = NULL;
@@ -6564,6 +7618,22 @@ void handle_congestion_cmd(int argc, char **argv) {
     }
     int max_count = 0;
     for (int i = 0; i < ap_count; i++) {
+        glog("No APs found during scan.\n");
+        status_display_show_status("No AP Found");
+        return;
+    }
+
+    int unique_count = 0;
+    int *channels = spiram_malloc((size_t)ap_count * sizeof(int));
+    int *counts = spiram_malloc((size_t)ap_count * sizeof(int));
+    if (!channels || !counts) {
+        free(channels);
+        free(counts);
+        glog("Error: Failed to allocate memory for channel counts.\n");
+        status_display_show_status("Congest OOM");
+        return;
+    }
+    int max_count = 0;
         int ch = ap_records[i].primary;
         if (ch <= 0) continue;
         int idx = -1;
@@ -6586,6 +7656,7 @@ void handle_congestion_cmd(int argc, char **argv) {
             if (channels[i] > channels[j]) {
                 int tmp_ch = channels[i]; channels[i] = channels[j]; channels[j] = tmp_ch;
                 int tmp_cnt = counts[i]; counts[i] = counts[j]; counts[j] = tmp_cnt;
+>>>>>>> 54_nowe
             }
         }
     }
@@ -6599,6 +7670,7 @@ void handle_congestion_cmd(int argc, char **argv) {
     glog("%s", header);
     glog("| CH | Count | Bar        |\n");
     glog("%s", separator);
+>>>>>>> 54_nowe
 
     const int max_bar_length = 10;
     char display_bar[max_bar_length * 4]; // Generous buffer: 3 bytes/block + 1 space/pad + null
@@ -6625,6 +7697,7 @@ void handle_congestion_cmd(int argc, char **argv) {
     free(channels);
     free(counts);
     glog("%s", footer);
+>>>>>>> 54_nowe
 }
 
 // Forward declaration for the new print function
@@ -6640,6 +7713,7 @@ void handle_scanall(int argc, char **argv) {
         } else {
             glog("Invalid duration: '%s'. Using default %d seconds.\n", argv[1], total_seconds);
             status_display_show_status("ScanAll Usage");
+>>>>>>> 54_nowe
         }
     }
 
@@ -6651,6 +7725,7 @@ void handle_scanall(int argc, char **argv) {
 
     // 1. Perform AP Scan
     glog("--- Starting AP Scan (%d seconds) ---\n", ap_scan_seconds);
+>>>>>>> 54_nowe
     wifi_manager_start_scan_with_time(ap_scan_seconds);
     // Results are now in scanned_aps and ap_count
 
@@ -6659,11 +7734,13 @@ void handle_scanall(int argc, char **argv) {
     station_count = 0; // Reset station list before new scan
     wifi_manager_start_station_scan(); // Starts monitor mode + channel hopping
     glog("Station scan running for %d seconds...\n", sta_scan_seconds);
+>>>>>>> 54_nowe
     vTaskDelay(pdMS_TO_TICKS(sta_scan_seconds * 1000));
     wifi_manager_stop_monitor_mode(); // Stops monitor mode + channel hopping
     // Results are now in station_ap_list and station_count
 
     glog("--- Scan Complete ---\n");
+>>>>>>> 54_nowe
 
     // 3. Print Combined Results
     wifi_manager_scanall_chart();
@@ -10688,6 +11765,7 @@ void handle_sinkhole_cmd(int argc, char **argv) {
     } else {
         glog("Unknown command. Use 'sinkhole help' for options.\n");
     }
+>>>>>>> 54_nowe
 }
 
 void register_commands() {
@@ -10728,6 +11806,7 @@ void register_commands() {
     register_command("startwd", handle_startwd);
     register_command("gpsinfo", handle_gps_info);
     register_command("gpspin", handle_gps_pin);
+>>>>>>> 54_nowe
     register_command("scanports", handle_scan_ports);
     register_command("scanarp", handle_scan_arp);
     register_command("scanssh", handle_scan_ssh);
@@ -11190,3 +12269,4 @@ void handle_camerastream_cmd(int argc, char **argv) {
     }
 }
 #endif
+>>>>>>> 54_nowe

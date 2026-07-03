@@ -116,6 +116,7 @@ void print_text_to_printer(const char *printer_ip, const char *text,
     ESP_LOGI(TAG, "Sent %d bytes to the printer", err);
     glog("Successfully sent print job to printer\n");
     ghostscript_emit_event("printer_job", "ok");
+>>>>>>> 54_nowe
   }
 
   close(sock);

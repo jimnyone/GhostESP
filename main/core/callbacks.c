@@ -8,6 +8,7 @@
 #include "managers/ghostchi_manager.h"
 #include "managers/ghostscript_runtime.h"
 #include "core/utils.h"
+>>>>>>> 54_nowe
 #include "vendor/GPS/gps_logger.h"
 #include "vendor/pcap.h"
 #include "core/glog.h"
@@ -783,6 +784,7 @@ static bool is_pineapple_oui(const uint8_t *bssid);
 static void trim_trailing(char *str);
 static bool compare_bssid(const uint8_t *bssid1, const uint8_t *bssid2);
 static bool is_beacon_packet(const wifi_promiscuous_pkt_t *pkt);
+static const char *SKIMMER_TAG STORE_STR_ATTR = "SKIMMER_DETECT";
 static pineap_network_t *find_or_create_network(const uint8_t *bssid);
 #ifndef CONFIG_IDF_TARGET_ESP32S2
 #endif
@@ -1158,6 +1160,7 @@ void cleanup_pcap_queue(void) {
     }
 }
 
+>>>>>>> 54_nowe
 static const char *suspicious_names[] STORE_DATA_ATTR = {
     "HC-03", "HC-05", "HC-06",  "HC-08",    "BT-HC05", "JDY-31",
     "AT-09", "HM-10", "CC41-A", "MLT-BT05", "SPP-CA",  "FFD0"};
@@ -1756,6 +1759,7 @@ static void stop_pineap_log_worker(void) {
     }
 }
 
+>>>>>>> 54_nowe
 void start_pineap_detection(void) {
     if (!allocate_pineap_tables()) {
         glog("PineAP: failed to allocate detection tables\n");

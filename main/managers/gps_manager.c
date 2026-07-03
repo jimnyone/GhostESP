@@ -6,6 +6,7 @@
 #include "managers/settings_manager.h"
 #include "managers/ghostchi_manager.h"
 #include "managers/ghostscript_runtime.h"
+>>>>>>> 54_nowe
 #include "soc/gpio_periph.h"
 #include "soc/io_mux_reg.h"
 #include "sys/time.h"
@@ -586,6 +587,7 @@ static void gps_soft_try_reacquire_rgb_rmt(void) {
     rgb_manager_rmt_reacquire();
 #endif
 }
+>>>>>>> 54_nowe
 
 nmea_parser_handle_t nmea_hdl;
 
