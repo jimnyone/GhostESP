@@ -10,7 +10,6 @@
 #include "core/ouis.h"       // For OUI vendor lookup
 #include "managers/ghostchi_manager.h"
 #include "vendor/pcap.h"     // For pcap_is_wireshark_mode()
->>>>>>> 54_nowe
 #include "esp_crt_bundle.h"
 #include "esp_event.h"
 #include "esp_heap_caps.h" // Add include for heap stats
