@@ -1,15 +1,26 @@
-# What's new (Author - fill this out)
-- 
+## Description
+<!-- Briefly describe what this PR does and why -->
 
-# Changed
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Breaking change
+- [ ] Documentation update
+- [ ] Refactor / code cleanup
+- [ ] Other (describe):
+
+## What's new (Author - fill this out)
 -
 
-# Removed
+## Changed
 -
 
-# Verification (Author - fill this out)
-- I have tested Primary device(s) (list exact HW + config): 
-- I have tested potentially affected devices (and/or list potential affected devices not available to you):  
+## Removed
+-
+
+## Verification (Author - fill this out)
+- I have tested Primary device(s) (list exact HW + config):
+- I have tested potentially affected devices (and/or list potential affected devices not available to you):
 - I have wrapped device specific code with `#ifdef CONFIG_...` or similar: [ ] Yes / [ ] N/A
 - I have updated Hugo Docs with any new or changed info for end users: [ ] Yes / [ ] N/A
 

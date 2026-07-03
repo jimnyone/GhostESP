@@ -11,6 +11,7 @@
 #include "managers/ghostchi_manager.h"
 #include "managers/ghostscript_runtime.h"
 #include "gui/toast.h"
+>>>>>>> 54_nowe
 #include "sys/time.h"
 #include <arpa/inet.h>
 #include <errno.h>
@@ -547,6 +548,7 @@ esp_err_t pcap_file_open_in_dir(const char *base_file_name,
   char cap_payload[64];
   snprintf(cap_payload, sizeof(cap_payload), "%s|%d", pcap_base_name, (int)capture_type);
   ghostscript_emit_event_escaped("capture_started", cap_payload);
+>>>>>>> 54_nowe
   return ESP_OK;
 }
 
@@ -1099,4 +1101,5 @@ void pcap_wireshark_stop(void) {
     xSemaphoreGive(pcap_mutex);
   }
   cleanup_pcap_queue();
+>>>>>>> 54_nowe
 }

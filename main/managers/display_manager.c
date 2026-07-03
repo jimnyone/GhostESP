@@ -82,6 +82,7 @@ static StaticTask_t *hardware_input_task_buffer = NULL;
 static i2c_master_bus_handle_t s_touch_i2c_bus = NULL;
 #endif
 #endif
+>>>>>>> 54_nowe
 
 #ifdef CONFIG_USE_CARDPUTER
 #include "vendor/keyboard_handler.h"
@@ -2150,6 +2151,7 @@ static bool touch_move_events_enabled_for_current_view(void) {
 
 bool display_manager_is_available(void) { return display_manager_init_success; }
 
+>>>>>>> 54_nowe
 void display_manager_fill_screen(lv_color_t color) {
   lv_obj_t *scr = lv_scr_act();
   if (!scr) return;

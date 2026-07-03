@@ -8,6 +8,11 @@ if("${IDF_TARGET}" STREQUAL "esp32c5" OR "${IDF_TARGET}" STREQUAL "esp32c6" OR "
     return()
 endif()
 
+add_compile_options(-Wno-error=array-bounds)
+
+set(COMPONENT_ADD_INCLUDEDIRS
+    src
+    )
 file(GLOB SRCS
      src/*.cpp
      src/lgfx/Fonts/efont/*.c

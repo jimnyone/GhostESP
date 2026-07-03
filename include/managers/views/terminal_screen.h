@@ -49,3 +49,4 @@ void terminal_set_dualcomm_filter(bool enable);
 void terminal_screen_create(lv_obj_t* parent);
 
 #endif // TERMINAL_VIEW_H
+>>>>>>> 54_nowe

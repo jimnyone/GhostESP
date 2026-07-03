@@ -1452,6 +1452,7 @@ menu "Ghost ESP Options"
 
     endmenu
 
+>>>>>>> 54_nowe
     menu "SPI and MMC Configuration"
     
     config USING_SPI
